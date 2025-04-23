@@ -244,11 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Toggle play/pause
         toggleButton.addEventListener('click', function() {
             if (audioElement.paused) {
-                // Explicitly load before playing
-                audioElement.load();
-                audioElement.play().catch(error => {
-                    console.error('Error playing audio:', error);
-                });
+                audioElement.play();
                 this.textContent = 'PAUSE 5N4CK_TUN3';
             } else {
                 audioElement.pause();
