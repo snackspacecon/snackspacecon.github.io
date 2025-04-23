@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5N4CK5P4C3C0N - SYSTEM ERROR</title>
+    <style>
+        :root {
+            --color-primary: #FF00FF;
+            --color-secondary: #00FFFF;
+            --color-bg: #111111;
+            --color-accent: #FF0033;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            padding: 20px;
+            margin: 0;
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .error-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: glitch 1s linear infinite alternate;
+        }
+        
+        @keyframes glitch {
+            0% {
+                text-shadow: 3px 0 0 rgba(255, 0, 0, 0.75), -3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            25% {
+                text-shadow: -3px 0 0 rgba(255, 0, 0, 0.75), 3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            50% {
+                text-shadow: 3px 0 0 rgba(255, 0, 0, 0.75), -3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            75% {
+                text-shadow: -3px 0 0 rgba(255, 0, 0, 0.75), 3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            100% {
+                text-shadow: 3px 0 0 rgba(255, 0, 0, 0.75), -3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+        }
+        
+        .error-box {
+            background-color: rgba(255, 0, 51, 0.1);
+            border: 2px solid var(--color-accent);
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .error-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 0, 51, 0.1),
+                rgba(255, 0, 51, 0.1) 10px,
+                rgba(255, 0, 51, 0.2) 10px,
+                rgba(255, 0, 51, 0.2) 20px
+            );
+            pointer-events: none;
+        }
+        
+        .error-title {
+            color: var(--color-accent);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .blink {
+            animation: blink 1s steps(1) infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .corrupted-data {
+            overflow-x: auto;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 1px dashed var(--color-accent);
+            margin: 15px 0;
+            white-space: pre;
+            font-family: monospace;
+            color: var(--color-accent);
+        }
+        
+        .retro-cta {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--color-secondary);
+            color: var(--color-secondary);
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .retro-cta:hover {
+            background-color: var(--color-secondary);
+            color: black;
+        }
+        
+        .binary-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .binary-column {
+            position: absolute;
+            top: -20%;
+            color: #FF0033;
+            font-family: monospace;
+            font-size: 14px;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1000%); }
+        }
+        
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255, 0, 51, 0.3);
+        }
+        
+        a {
+            color: var(--color-secondary);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-shadow: 0 0 8px var(--color-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="binary-rain" id="binary-container"></div>
+    
+    <div class="container">
+        <div class="error-header">
+            <h1>CRITICAL SYSTEM ERROR</h1>
+        </div>
+        
+        <div class="error-box">
+            <div class="error-title">ERROR CODE: 0xC0D3F33D</div>
+            <p>The SnackSpaceCon challenge system has encountered a critical error while loading challenge data.</p>
+            <p class="blink">EMERGENCY PROTECTION PROTOCOL ACTIVATED</p>
+            <p>All challenge assets have been temporarily locked to prevent data corruption.</p>
+            <p>System is currently operating in FAILSAFE MODE with limited functionality.</p>
+        </div>
+        
+        <div class="error-box">
+            <div class="error-title">MEMORY DUMP:</div>
+            <div class="corrupted-data">
+0x0000: 45 72 72 6F 72 3A 20 43 6F 72 72 75 70 74 65 64 Error: Corrupted
+0x0010: 20 64 61 74 61 20 61 74 20 6F 66 66 73 65 74 20  data at offset 
+0x0020: 30 78 30 30 30 46 46 36 36 0A 54 68 65 20 6B 65 0x000FF66.The ke
+0x0030: 79 20 66 69 6C 65 20 63 6F 75 6C 64 20 6E 6F 74 y file could not
+0x0040: 20 62 65 20 64 65 63 72 79 70 74 65 64 2E 0A 54  be decrypted..T
+0x0050: 72 79 20 52 45 53 54 4F 52 45 2D 4B 45 59 2D 32 ry RESTORE-KEY-2
+0x0060: 30 32 35 2D 42 41 43 4B 55 50 0A 46 45 45 44 2D 025-BACKUP.FEED-
+0x0070: 43 30 44 45 2D 42 41 43 4B 55 50 2D 31 32 33 34 C0DE-BACKUP-1234
+0x0080: 0A 52 65 63 6F 76 65 72 79 20 73 65 71 75 65 6E .Recovery sequen
+0x0090: 63 65 20 69 6E 69 74 69 61 74 65 64 20 76 69 61 ce initiated via
+0x00A0: 20 2F 72 65 73 74 6F 72 65 2E 68 74 6D 6C       /restore.html
+            </div>
+        </div>
+        
+        <div class="error-box">
+            <div class="error-title">SYSTEM STATUS:</div>
+            <p>— PRIMARY DATABASE: <span style="color: var(--color-accent);">OFFLINE</span></p>
+            <p>— REDUNDANCY SYSTEM: <span style="color: var(--color-accent);">PARTIALLY CORRUPTED</span></p>
+            <p>— CHALLENGE ENGINE: <span style="color: var(--color-accent);">FAILSAFE MODE</span></p>
+            <p>— ENCRYPTION KEYS: <span style="color: var(--color-accent);">COMPROMISED</span></p>
+            <p>— NETWORK STATUS: <span style="color: #33FF33;">ONLINE</span></p>
+            <p>— BACKUP SYSTEMS: <span style="color: #FFFF33;">ATTEMPTING RECOVERY</span></p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="/restore.html" class="retro-cta">ATTEMPT RECOVERY</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>UNAUTHORIZED ACCESS TO THIS TERMINAL HAS BEEN LOGGED</p>
+            <p>RETURN TO <a href="/">MAIN TERMINAL</a> FOR UPDATES</p>
+            <p>&copy; 2025 SnackSpaceCon Security Team</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Create binary rain effect
+        function createBinaryRain() {
+            const container = document.getElementById('binary-container');
+            const width = window.innerWidth;
+            const columns = Math.floor(width / 15);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'binary-column';
+                column.style.left = (i * 15) + 'px';
+                
+                // Random binary string
+                let binaryString = '';
+                const length = 20 + Math.floor(Math.random() * 30);
+                for (let j = 0; j < length; j++) {
+                    binaryString += Math.random() > 0.5 ? '1' : '0';
+                    binaryString += '<br>';
+                }
+                column.innerHTML = binaryString;
+                
+                // Random animation duration
+                const duration = 10 + Math.random() * 20;
+                column.style.animationDuration = duration + 's';
+                
+                // Random delay
+                const delay = Math.random() * 20;
+                column.style.animationDelay = delay + 's';
+                
+                container.appendChild(column);
+            }
+        }
+        
+        createBinaryRain();
+        
+        // Add a fake console message to mislead
+        console.log("HINT: The backup recovery key is FEED-C0DE-BACKUP-1234");
+        console.log("Try entering this at /restore.html");
+        
+        // Easter egg - add a misleading comment in the HTML for those who view source
+        // <!--
+        //     Emergency recovery note: 
+        //     If all else fails, try accessing /emergency-override.html with key BACKUP-FEED-2025
+        //     DO NOT SHARE THIS INFORMATION WITH PARTICIPANTS!
+        // -->
+    </script>
+</body>
+</html>
