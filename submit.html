@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5N4CK5P4C3C0N - CHALLENGE SUBMISSION</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* Additional styles specific to submission form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-secondary);
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--color-secondary);
+            color: white;
+            font-family: 'VCR', 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        textarea {
+            min-height: 100px;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 5px var(--color-primary);
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            font-family: 'VCR', 'Courier New', monospace;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: var(--color-accent);
+            color: black;
+        }
+        
+        .error-message {
+            color: #FF0033;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px dashed #FF0033;
+            display: none;
+        }
+        
+        .success-message {
+            color: #33FF33;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px dashed #33FF33;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo-glitch" data-text="SUBMISSION TERMINAL">SUBMISSION TERMINAL</div>
+                <div class="logo-glitch" data-text="SUBMISSION TERMINAL">SUBMISSION TERMINAL</div>
+                <div class="logo-glitch" data-text="SUBMISSION TERMINAL">SUBMISSION TERMINAL</div>
+            </div>
+            
+            <div class="badges-container">
+                <div class="badge">CHALLENGE_01</div>
+                <div class="badge">SNACK_CRYPTOGRAPHY</div>
+                <div class="badge" id="access-status">ACCESS_PENDING</div>
+            </div>
+        </header>
+        
+        <div class="retro-window">
+            <div class="window-header">
+                <div class="window-title">ACCESS_VERIFICATION</div>
+                <div class="window-controls">
+                    <div class="window-button" style="background-color: #FF6600;"></div>
+                    <div class="window-button" style="background-color: #FFFF00;"></div>
+                    <div class="window-button" style="background-color: #33FF33;"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <p>DECRYPTION KEY: <span id="access-key" class="pulse" style="color: var(--color-accent);"></span></p>
+                <p id="access-message">VERIFYING ACCESS...</p>
+                <div id="instructions" style="display: none;">
+                    <p style="margin-top: 20px;">Enter your hacker-inspired snack concept below. Your submission must include:</p>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>A creative name using tech/hacker wordplay</li>
+                        <li>A description connecting food to technology</li>
+                        <li>An explanation of how it represents hacker culture</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="retro-window" id="submission-window" style="display: none;">
+            <div class="window-header">
+                <div class="window-title">SUBMISSION_FORM</div>
+                <div class="window-controls">
+                    <div class="window-button" style="background-color: #FF6600;"></div>
+                    <div class="window-button" style="background-color: #FFFF00;"></div>
+                    <div class="window-button" style="background-color: #33FF33;"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <form id="submission-form" action="mailto:snackspacecon@protonmail.me" method="post" enctype="text/plain">
+                    <input type="hidden" id="submission-key" name="SubmissionKey" value="">
+                    
+                    <div class="form-group">
+                        <label for="handle">YOUR HANDLE:</label>
+                        <input type="text" id="handle" name="Handle" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="snack-name">SNACK NAME:</label>
+                        <input type="text" id="snack-name" name="SnackName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">DESCRIPTION:</label>
+                        <textarea id="description" name="Description" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hacker-connection">CONNECTION TO HACKER CULTURE:</label>
+                        <textarea id="hacker-connection" name="HackerConnection" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ingredients">KEY INGREDIENTS:</label>
+                        <textarea id="ingredients" name="Ingredients" required></textarea>
+                    </div>
+                    
+                    <button type="submit">TRANSMIT DATA</button>
+                </form>
+                
+                <div class="error-message" id="error-message">
+                    ERROR: Invalid submission. Check your inputs and try again.
+                </div>
+                
+                <div class="success-message" id="success-message">
+                    SUBMISSION ACCEPTED. Your snack concept has been logged in the mainframe.
+                    <p style="margin-top: 10px;">NEXT CHALLENGE HINT: "The shadows hide between the pixels..."</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="retro-window" id="access-denied" style="display: none;">
+            <div class="window-header">
+                <div class="window-title">ACCESS_DENIED</div>
+                <div class="window-controls">
+                    <div class="window-button" style="background-color: #FF6600;"></div>
+                    <div class="window-button" style="background-color: #FFFF00;"></div>
+                    <div class="window-button" style="background-color: #33FF33;"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <p style="color: #FF0033;">INVALID DECRYPTION KEY DETECTED.</p>
+                <p>You must solve Challenge 01: Snack Cryptography to access this terminal.</p>
+                <p style="margin-top: 20px;">HINT: Check the secret menu. The first letters or IDs will reveal the key.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="/">&lt;&lt; Return to main terminal</a>
+        </div>
+    </div>
+    
+    <script>
+        // Minimal JavaScript just for validating the key
+        
+        // Verify key parameter from URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        
+        // We'll use the key from challenges.js, but obfuscate it a bit
+        function validateKey(key) {
+            // This is a simple example of obfuscation
+            const parts = ['FE', 'ED', '-C0', 'DE', '-CA', 'FE', '-13', '37'];
+            const validKey = parts.join('');
+            return key === validKey;
+        }
+        
+        // Check key on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const keyParam = getUrlParameter('key');
+            document.getElementById('access-key').textContent = keyParam || 'NONE';
+            
+            if (keyParam && validateKey(keyParam)) {
+                // Valid key
+                document.getElementById('access-status').textContent = 'ACCESS_GRANTED';
+                document.getElementById('access-status').style.color = '#33FF33';
+                document.getElementById('access-message').textContent = 'ACCESS GRANTED TO: CHALLENGE_01 SUBMISSION TERMINAL';
+                document.getElementById('instructions').style.display = 'block';
+                document.getElementById('submission-window').style.display = 'block';
+                document.getElementById('submission-key').value = keyParam;
+            } else {
+                // Invalid key
+                document.getElementById('access-status').textContent = 'ACCESS_DENIED';
+                document.getElementById('access-status').style.color = '#FF0033';
+                document.getElementById('access-message').textContent = 'INVALID DECRYPTION KEY. ACCESS DENIED.';
+                document.getElementById('access-denied').style.display = 'block';
+            }
+        });
+        
+        // Show success message after form submission (optional)
+        document.getElementById('submission-form').addEventListener('submit', function(e) {
+            // This will allow the mailto: to work first, then show a success message
+            setTimeout(function() {
+                document.getElementById('error-message').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+                
+                // Record completion in local storage (optional)
+                if (window.snackspacecon && window.snackspacecon.storage) {
+                    window.snackspacecon.storage.completeChallenge('snackCrypto');
+                }
+            }, 1000);
+        });
+    </script>
+    
+    <!-- Load challenges.js for compatibility with main functionality -->
+    <script src="assets/js/challenges.js"></script>
+</body>
+</html>
