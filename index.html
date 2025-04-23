@@ -45,6 +45,17 @@
                 <div class="badge">H4CK3R C0R3</div>
                 <div class="badge">M4Y 11-15 2025</div>
                 <div class="badge">N0 N0RM13S</div>
+                
+                <!-- New system status badges that serve as links -->
+                <div class="badge" style="background-color: rgba(255, 0, 51, 0.2); border-color: #FF0033;">
+                    <a href="system-error.html" style="color: inherit; text-decoration: none;">SYST3M_ERR0R</a>
+                </div>
+                <div class="badge" style="background-color: rgba(255, 102, 0, 0.2); border-color: #FF6600;">
+                    <a href="maintenance.html" style="color: inherit; text-decoration: none;">M41NT3N4NC3</a>
+                </div>
+                <div class="badge" style="background-color: rgba(0, 255, 255, 0.2); border-color: #00FFFF;">
+                    <a href="admin.html" style="color: inherit; text-decoration: none;">4DM1N</a>
+                </div>
             </div>
         </header>
         
@@ -159,7 +170,7 @@
             <div>Establishing peer connection...</div>
             <div>Scanning for unauthorized monitoring...</div>
             <div>Connection secured via obfuscated channel</div>
-            <div>Waiting for other nodes...</div>
+            <div>Waiting for other nodes... errantpacket detected/</div>
             <div>Bring your own tools</div>
             <div>Expect the unexpected</div>
             <div>Trust verification required</div>
@@ -169,6 +180,39 @@
         <div class="console-input">
             <span>></span>
             <input type="text" placeholder="enter command..." id="console-input">
+        </div>
+        
+        <!-- System Status Section -->
+        <div class="retro-window" style="margin-top: 40px;">
+            <div class="window-header">
+                <div class="window-title">SYSTEM_STATUS</div>
+                <div class="window-controls">
+                    <div class="window-button" style="background-color: #FF6600;"></div>
+                    <div class="window-button" style="background-color: #FFFF00;"></div>
+                    <div class="window-button" style="background-color: #33FF33;"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div style="text-align: center; padding: 15px; border: 1px dashed var(--color-accent);">
+                        <h3 style="color: #FF0033; margin-bottom: 10px;">SYSTEM ERROR</h3>
+                        <p>Critical data corruption detected in challenge database.</p>
+                        <a href="system-error.html" style="display: inline-block; margin-top: 10px; padding: 5px 10px; background-color: rgba(255, 0, 51, 0.2); border: 1px solid #FF0033; color: #FF0033; text-decoration: none;">VIEW DETAILS</a>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 15px; border: 1px dashed var(--color-secondary);">
+                        <h3 style="color: var(--color-secondary); margin-bottom: 10px;">MAINTENANCE</h3>
+                        <p>Scheduled system maintenance in progress.</p>
+                        <a href="maintenance.html" style="display: inline-block; margin-top: 10px; padding: 5px 10px; background-color: rgba(0, 255, 255, 0.2); border: 1px solid var(--color-secondary); color: var(--color-secondary); text-decoration: none;">CHECK STATUS</a>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 15px; border: 1px dashed var(--color-primary);">
+                        <h3 style="color: var(--color-primary); margin-bottom: 10px;">ADMIN PORTAL</h3>
+                        <p>Organizer access only. Authentication required.</p>
+                        <a href="admin.html" style="display: inline-block; margin-top: 10px; padding: 5px 10px; background-color: rgba(255, 0, 255, 0.2); border: 1px solid var(--color-primary); color: var(--color-primary); text-decoration: none;">ACCESS PORTAL</a>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <footer>
@@ -181,7 +225,7 @@
     
     <!-- Hidden secret-menu page hint -->
     <!-- 
-    For those who inspect: The secret menu is available at /secret-menu.html
+    For those who inspect: The secret menu is available at /secret-menu.html :-)
     But you'll need to decode what you find there...
     -->
     
