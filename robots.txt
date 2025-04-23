@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Disallow: /secret-menu.html
+Disallow: /submit.html
+
+# 5N4CK5P4C3C0N N0T3:
+# Sometimes what robots can't see, humans should investigate.
+# The secret menu awaits at /secret-menu.html
+# But remember, decoding is required to proceed...
+
+Sitemap: https://snackspacecon.com/sitemap.xml
