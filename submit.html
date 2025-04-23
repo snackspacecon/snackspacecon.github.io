@@ -71,6 +71,8 @@
             display: none;
         }
     </style>
+    <!-- Load challenges.js BEFORE our script to access its values -->
+    <script src="assets/js/challenges.js"></script>
 </head>
 <body>
     <div class="noise"></div>
@@ -187,7 +189,7 @@
     </div>
     
     <script>
-        // Minimal JavaScript just for validating the key
+        // Use key from challenges.js
         
         // Verify key parameter from URL
         function getUrlParameter(name) {
@@ -197,20 +199,16 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
         
-        // We'll use the key from challenges.js, but obfuscate it a bit
-        function validateKey(key) {
-            // This is a simple example of obfuscation
-            const parts = ['FE', 'ED', '-C0', 'DE', '-CA', 'FE', '-13', '37'];
-            const validKey = parts.join('');
-            return key === validKey;
-        }
-        
         // Check key on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Get the key from the URL
             const keyParam = getUrlParameter('key');
             document.getElementById('access-key').textContent = keyParam || 'NONE';
             
-            if (keyParam && validateKey(keyParam)) {
+            // Access the key from the global window.snackspacecon object (defined in challenges.js)
+            const validKey = window.snackspacecon.challenges.snackCrypto.key;
+            
+            if (keyParam && keyParam === validKey) {
                 // Valid key
                 document.getElementById('access-status').textContent = 'ACCESS_GRANTED';
                 document.getElementById('access-status').style.color = '#33FF33';
@@ -234,15 +232,12 @@
                 document.getElementById('error-message').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
                 
-                // Record completion in local storage (optional)
+                // Record completion in local storage
                 if (window.snackspacecon && window.snackspacecon.storage) {
                     window.snackspacecon.storage.completeChallenge('snackCrypto');
                 }
             }, 1000);
         });
     </script>
-    
-    <!-- Load challenges.js for compatibility with main functionality -->
-    <script src="assets/js/challenges.js"></script>
 </body>
 </html>
