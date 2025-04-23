@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // If we have challenges.js loaded, use its console terminal
                     if (window.snackspacecon && window.snackspacecon.terminal) {
                         // Use the terminal from challenges.js
+                        window.snackspacecon.terminal.processCommand(command);
                     } else {
                         // Simple fallback if challenges.js isn't loaded
                         const outputElement = document.querySelector('.interactive-console');
@@ -262,6 +263,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize challenges.js functionality if available
     if (window.snackspacecon) {
         console.log('SnackSpaceCon challenge system initialized');
+        
+        // Initialize the console terminal if challenge system is loaded
+        const consoleInput = document.getElementById('console-input');
+        const consoleOutput = document.querySelector('.interactive-console');
+        
+        if (consoleInput && consoleOutput && typeof ConsoleTerminal === 'function') {
+            // Create a new terminal instance and assign it to window.snackspacecon
+            const terminal = new ConsoleTerminal(consoleInput, consoleOutput);
+            window.snackspacecon.terminal = terminal;
+            
+            // Add initial welcome message
+            terminal.appendOutput('5N4CK5P4C3C0N TERMINAL v1.0');
+            terminal.appendOutput('Type "help" for available commands.');
+            terminal.appendOutput('>_');
+        }
     }
     
     // Handle hidden hint on text selection

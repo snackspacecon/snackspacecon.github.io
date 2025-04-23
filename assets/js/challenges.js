@@ -318,6 +318,11 @@ class ConsoleTerminal {
     cmdReset() {
         this.appendOutput('WARNING: This will reset all challenge progress.');
         this.appendOutput('To confirm, type "reset confirm"');
+        
+        if (arguments[0] && arguments[0][0] === 'confirm') {
+            storage.resetProgress();
+            this.appendOutput('Challenge progress has been reset.');
+        }
     }
 }
 
@@ -582,6 +587,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (consoleInput && consoleOutput) {
         const terminal = new ConsoleTerminal(consoleInput, consoleOutput);
+        // Make terminal accessible globally
+        window.snackspacecon.terminal = terminal;
         
         // Add initial welcome message
         terminal.appendOutput('5N4CK5P4C3C0N TERMINAL v1.0');
