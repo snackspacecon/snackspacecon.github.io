@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5N4CK5P4C3C0N - SYSTEM RESTORE</title>
+    <style>
+        :root {
+            --color-primary: #FF00FF;
+            --color-secondary: #00FFFF;
+            --color-bg: #111111;
+            --color-accent: #FF6600;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            padding: 20px;
+            margin: 0;
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+        
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.1;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .restore-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: glitch 1s linear infinite alternate;
+        }
+        
+        @keyframes glitch {
+            0% {
+                text-shadow: 3px 0 0 rgba(255, 0, 0, 0.75), -3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            25% {
+                text-shadow: -3px 0 0 rgba(255, 0, 0, 0.75), 3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            50% {
+                text-shadow: 3px 0 0 rgba(255, 0, 0, 0.75), -3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            75% {
+                text-shadow: -3px 0 0 rgba(255, 0, 0, 0.75), 3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+            100% {
+                text-shadow: 3px 0 0 rgba(255, 0, 0, 0.75), -3px 0 0 rgba(0, 255, 255, 0.75);
+            }
+        }
+        
+        .restore-box {
+            background-color: rgba(0, 255, 255, 0.1);
+            border: 2px solid var(--color-secondary);
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .restore-title {
+            color: var(--color-secondary);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .blink {
+            animation: blink 1s steps(1) infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .terminal {
+            overflow-x: auto;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 1px dashed var(--color-secondary);
+            margin: 15px 0;
+            font-family: monospace;
+            color: var(--color-secondary);
+            height: 300px;
+            overflow-y: auto;
+        }
+        
+        .terminal-line {
+            margin: 8px 0;
+            white-space: nowrap;
+        }
+        
+        .key-input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--color-secondary);
+            color: var(--color-secondary);
+            font-family: monospace;
+            margin-top: 20px;
+        }
+        
+        .restore-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--color-secondary);
+            color: var(--color-secondary);
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .restore-button:hover {
+            background-color: var(--color-secondary);
+            color: black;
+        }
+        
+        #rickroll-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #video-container {
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        .hacker-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px);
+            background-size: 3px 3px;
+            z-index: 101;
+            pointer-events: none;
+        }
+        
+        .glitch-text {
+            font-family: 'Courier New', monospace;
+            font-size: 2em;
+            color: #FF00FF;
+            text-shadow: 0 0 5px #FF00FF;
+            margin-bottom: 20px;
+            animation: textglitch 0.3s linear infinite alternate;
+        }
+        
+        @keyframes textglitch {
+            0% {
+                text-shadow: 2px 0 0 #00FFFF, -2px 0 0 #FF6600;
+            }
+            100% {
+                text-shadow: -2px 0 0 #00FFFF, 2px 0 0 #FF6600;
+            }
+        }
+        
+        .binary-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .binary-column {
+            position: absolute;
+            color: #00FFFF;
+            font-family: monospace;
+            font-size: 14px;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1000%); }
+        }
+        
+        .exit-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            z-index: 102;
+            display: none;
+        }
+        
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        a {
+            color: var(--color-secondary);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-shadow: 0 0 8px var(--color-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="binary-rain" id="binary-container"></div>
+    
+    <div class="container">
+        <div class="restore-header">
+            <h1>SYSTEM RESTORE UTILITY</h1>
+        </div>
+        
+        <div class="restore-box">
+            <div class="restore-title">RESTORE PROTOCOL INITIALIZED</div>
+            <p>To recover system functionality, enter the backup recovery key.</p>
+            <p>This will attempt to restore all challenge data from the backup server.</p>
+            <p class="blink">CAUTION: UNAUTHORIZED ACCESS ATTEMPTS WILL BE LOGGED</p>
+            
+            <div class="terminal" id="terminal">
+                <div class="terminal-line">> SYSTEM RESTORE UTILITY v3.1.4</div>
+                <div class="terminal-line">> Initializing recovery protocols...</div>
+                <div class="terminal-line">> Scanning for backup servers...</div>
+                <div class="terminal-line">> Found backup server at 192.168.1.42</div>
+                <div class="terminal-line">> Establishing secure connection...</div>
+                <div class="terminal-line">> Connection established.</div>
+                <div class="terminal-line">> Enter backup key to proceed with restoration.</div>
+            </div>
+            
+            <input type="text" id="key-input" class="key-input" placeholder="ENTER BACKUP KEY...">
+            <button class="restore-button" id="restore-button">ATTEMPT RECOVERY</button>
+        </div>
+        
+        <div class="restore-box">
+            <div class="restore-title">RECOVERY INSTRUCTIONS</div>
+            <p>If you have the proper backup key, enter it in the field above.</p>
+            <p>Format: XXXX-XXXX-XXXX-XXXX where X is an alphanumeric character.</p>
+            <p>Contact system administrator if you need assistance.</p>
+        </div>
+        
+        <footer>
+            <p>SnackSpaceCon System Restore Utility | <a href="/">Return to Main Terminal</a></p>
+            <p>&copy; 2025 SnackSpaceCon Tech Team</p>
+        </footer>
+    </div>
+    
+    <!-- Rick Roll Container -->
+    <div id="rickroll-container">
+        <div class="hacker-overlay"></div>
+        <div class="glitch-text" id="glitch-message">SYSTEM COMPROMISED</div>
+        <div id="video-container">
+            <iframe id="rickroll-video" width="100%" height="450" src="" title="Rick Roll" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <button class="exit-button" id="exit-button">EMERGENCY EXIT</button>
+    </div>
+    
+    <script>
+        // Create binary rain effect
+        function createBinaryRain() {
+            const container = document.getElementById('binary-container');
+            const width = window.innerWidth;
+            const columns = Math.floor(width / 15);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'binary-column';
+                column.style.left = (i * 15) + 'px';
+                
+                // Random binary string
+                let binaryString = '';
+                const length = 20 + Math.floor(Math.random() * 30);
+                for (let j = 0; j < length; j++) {
+                    binaryString += Math.random() > 0.5 ? '1' : '0';
+                    binaryString += '<br>';
+                }
+                column.innerHTML = binaryString;
+                
+                // Random animation duration
+                const duration = 10 + Math.random() * 20;
+                column.style.animationDuration = duration + 's';
+                
+                // Random delay
+                const delay = Math.random() * 20;
+                column.style.animationDelay = delay + 's';
+                
+                container.appendChild(column);
+            }
+        }
+        
+        createBinaryRain();
+        
+        // Terminal animation
+        const terminal = document.getElementById('terminal');
+        const keyInput = document.getElementById('key-input');
+        const restoreButton = document.getElementById('restore-button');
+        const rickrollContainer = document.getElementById('rickroll-container');
+        const rickrollVideo = document.getElementById('rickroll-video');
+        const exitButton = document.getElementById('exit-button');
+        const glitchMessage = document.getElementById('glitch-message');
+        
+        // Messages to display during the "hack"
+        const hackMessages = [
+            "> WARNING: Invalid key detected",
+            "> Security breach attempt detected",
+            "> Running countermeasures...",
+            "> Tracing connection...",
+            "> Firewall breach detected",
+            "> System compromised!!",
+            "> Initiating emergency protocol RICKROLL-2025",
+            "> YOU JUST GOT HACKED AND ROLLED!"
+        ];
+        
+        // List of funny hacker messages
+        const glitchMessages = [
+            "SYSTEM COMPROMISED",
+            "NEVER GONNA GIVE YOU UP",
+            "HACKER ATTACK IN PROGRESS",
+            "YOU'VE BEEN PWNED",
+            "ACCESS: DENIED",
+            "RESISTANCE IS FUTILE",
+            "HACK THE PLANET",
+            "RICK ROLL'D"
+        ];
+        
+        // Function to simulate typing in the terminal
+        function typeMessage(message, callback) {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            terminal.appendChild(line);
+            
+            let i = 0;
+            const text = message;
+            const interval = setInterval(() => {
+                line.textContent = text.substring(0, i);
+                i++;
+                
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                if (i > text.length) {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 30);
+        }
+        
+        // Function to launch the rick roll
+        function launchRickRoll() {
+            // Set the iframe source to Rick Astley video
+            rickrollVideo.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0";
+            
+            // Show the rick roll container
+            rickrollContainer.style.display = "flex";
+            exitButton.style.display = "block";
+            
+            // Change glitch message periodically
+            setInterval(() => {
+                glitchMessage.textContent = glitchMessages[Math.floor(Math.random() * glitchMessages.length)];
+            }, 2000);
+        }
+        
+        // Function to handle the restore button click
+        restoreButton.addEventListener('click', function() {
+            // Get the key value
+            const keyValue = keyInput.value.trim();
+            
+            // First message
+            typeMessage("> Attempting to restore with key: " + keyValue, () => {
+                // Start the fake "hacking" sequence
+                let messageIndex = 0;
+                
+                function typeNextMessage() {
+                    if (messageIndex < hackMessages.length) {
+                        typeMessage(hackMessages[messageIndex], () => {
+                            messageIndex++;
+                            setTimeout(typeNextMessage, 300);
+                        });
+                    } else {
+                        // When all messages are typed, launch the rick roll
+                        setTimeout(launchRickRoll, 1000);
+                    }
+                }
+                
+                setTimeout(typeNextMessage, 1000);
+            });
+        });
+        
+        // Handle key press in the input field
+        keyInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                restoreButton.click();
+            }
+        });
+        
+        // Exit button functionality
+        exitButton.addEventListener('click', function() {
+            rickrollVideo.src = "";
+            rickrollContainer.style.display = "none";
+            exitButton.style.display = "none";
+            
+            // Add a final message in the terminal
+            typeMessage("> YOU HAVE BEEN HACKED BY THE SNACKSPACECON CREW", () => {
+                typeMessage("> Better luck next time... maybe try a real backup key?");
+            });
+        });
+        
+        // Easter egg in console
+        console.log("HINT: The real backup key is NEVER-GONNA-GIVE-YOU-UP");
+    </script>
+</body>
+</html>
