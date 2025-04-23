@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5N4CK5P4C3C0N - 4DM1N P0RT4L</title>
+    <style>
+        :root {
+            --color-primary: #FF00FF;
+            --color-secondary: #00FFFF;
+            --color-bg: #111111;
+            --color-accent: #FF6600;
+            --color-success: #33FF33;
+            --color-error: #FF3333;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+            line-height: 1.4;
+            background-image: 
+                radial-gradient(var(--color-primary) 1px, transparent 1px),
+                radial-gradient(var(--color-secondary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            background-attachment: fixed;
+        }
+        
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.1;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 2px solid var(--color-primary);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--color-primary);
+            text-shadow: 0 0 10px var(--color-primary);
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .admin-badge {
+            padding: 5px 10px;
+            background-color: var(--color-accent);
+            color: black;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+        
+        .admin-status {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--color-success);
+            margin-right: 5px;
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .admin-panel {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            height: calc(100vh - 180px);
+        }
+        
+        .sidebar {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--color-secondary);
+            padding: 15px;
+        }
+        
+        .sidebar-menu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background-color: rgba(0, 255, 255, 0.1);
+            color: var(--color-secondary);
+        }
+        
+        .sidebar-menu li.active {
+            border-left: 4px solid var(--color-secondary);
+        }
+        
+        .sidebar-menu li:last-child {
+            border-bottom: none;
+        }
+        
+        .content-area {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--color-primary);
+            padding: 20px;
+            overflow: auto;
+        }
+        
+        .panel {
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .panel-title {
+            font-size: 1.2em;
+            color: var(--color-primary);
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 5px 15px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        button:hover {
+            background-color: var(--color-accent);
+            color: black;
+        }
+        
+        button.danger {
+            border-color: var(--color-error);
+            color: var(--color-error);
+        }
+        
+        button.danger:hover {
+            background-color: var(--color-error);
+            color: black;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .data-table th {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: var(--color-secondary);
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .data-table tr:hover {
+            background-color: rgba(255, 0, 255, 0.1);
+        }
+        
+        .status-success {
+            color: var(--color-success);
+        }
+        
+        .status-error {
+            color: var(--color-error);
+        }
+        
+        .status-warning {
+            color: #FFFF00;
+        }
+        
+        .secret-key {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px dashed var(--color-accent);
+            padding: 10px;
+            margin: 15px 0;
+            font-family: monospace;
+            cursor: pointer;
+            user-select: none;
+            color: var(--color-accent);
+        }
+        
+        .secret-key.revealed {
+            user-select: text;
+        }
+        
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .login-form {
+            background-color: var(--color-bg);
+            border: 2px solid var(--color-secondary);
+            padding: 30px;
+            width: 400px;
+            position: relative;
+        }
+        
+        .login-header {
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--color-secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--color-secondary);
+        }
+        
+        input {
+            width: 100%;
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--color-secondary);
+            color: white;
+            font-family: 'Courier New', monospace;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 5px var(--color-primary);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--color-secondary);
+            border: none;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .error-message {
+            color: var(--color-error);
+            margin-top: 10px;
+            padding: 5px;
+            border: 1px solid var(--color-error);
+            display: none;
+        }
+        
+        .login-hint {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--color-secondary);
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--color-secondary);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .terminal-box {
+            background-color: #000;
+            padding: 15px;
+            font-family: monospace;
+            color: #33FF33;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .terminal-line {
+            margin: 5px 0;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="login-overlay" id="login-overlay">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>ADMIN ACCESS REQUIRED</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">USERNAME:</label>
+                <input type="text" id="username" placeholder="Enter admin username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">PASSWORD:</label>
+                <input type="password" id="password" placeholder="Enter admin password">
+            </div>
+            
+            <div class="form-group">
+                <label for="token">SECURITY TOKEN:</label>
+                <input type="text" id="token" placeholder="Enter 2FA token">
+            </div>
+            
+            <button class="login-button" id="login-button">AUTHENTICATE</button>
+            
+            <div class="error-message" id="error-message">
+                Invalid credentials. Access denied.
+            </div>
+            
+            <div class="login-hint" id="login-hint">Need a hint?</div>
+        </div>
+    </div>
+    
+    <header>
+        <div class="logo">5N4CK5P4C3C0N 4DM1N</div>
+        <div class="admin-info">
+            <div class="admin-badge">ADMIN</div>
+            <div class="admin-status">
+                <div class="status-indicator"></div>
+                <span>ORGANIZER SESSION ACTIVE</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="admin-panel">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="active" data-panel="dashboard">Dashboard</li>
+                    <li data-panel="challenges">Challenge Management</li>
+                    <li data-panel="participants">Participant Data</li>
+                    <li data-panel="keys">Security Keys</li>
+                    <li data-panel="logs">System Logs</li>
+                    <li data-panel="settings">Settings</li>
+                    <li class="danger" data-panel="lockdown">Emergency Lockdown</li>
+                </ul>
+            </div>
+            
+            <div class="content-area">
+                <!-- Dashboard Panel -->
+                <div class="panel active" id="dashboard">
+                    <div class="panel-header">
+                        <div class="panel-title">SYSTEM DASHBOARD</div>
+                        <div class="control-buttons">
+                            <button>REFRESH</button>
+                            <button>EXPORT</button>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-stats">
+                        <h3>Challenge Status Overview</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 73%;"></div>
+                        </div>
+                        <p>Challenge 01: <span class="status-success">ACTIVE (47 completions)</span></p>
+                        <p>Challenge 02: <span class="status-success">ACTIVE (23 completions)</span></p>
+                        <p>Challenge 03: <span class="status-success">ACTIVE (12 completions)</span></p>
+                        <p>Master Challenge: <span class="status-success">LOCKED (0 completions)</span></p>
+                        
+                        <h3>Recent System Activity</h3>
+                        <div class="terminal-box" id="activity-log">
+                            <div class="terminal-line">[2025-05-01 09:43:12] Challenge system initialized</div>
+                            <div class="terminal-line">[2025-05-01 12:30:45] User 'hackr42' completed Challenge 01</div>
+                            <div class="terminal-line">[2025-05-01 14:22:18] Security scan completed - No vulnerabilities detected</div>
+                            <div class="terminal-line">[2025-05-01 16:05:33] User 'cyberpunk2025' attempted invalid key: 'TEST-KEY-1234'</div>
+                            <div class="terminal-line">[2025-05-01 17:12:09] Challenge 02 difficulty adjusted (-5%)</div>
+                            <div class="terminal-line">[2025-05-01 19:27:41] Backup completed successfully</div>
+                            <div class="terminal-line">[2025-05-01 21:38:52] User 'l33tcoder' completed Challenge 02</div>
+                            <div class="terminal-line">[2025-05-01 23:50:16] DNS challenge endpoints verified</div>
+                            <div class="terminal-line">[2025-05-02 01:15:30] Unauthorized access attempt blocked (IP: 192.168.1.***)</div>
+                            <div class="terminal-line">[2025-05-02 03:42:08] System entering scheduled maintenance mode</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Challenge Management Panel -->
+                <div class="panel" id="challenges">
+                    <div class="panel-header">
+                        <div class="panel-title">CHALLENGE MANAGEMENT</div>
+                        <div class="control-buttons">
+                            <button>ADD NEW</button>
+                            <button>RESET ALL</button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Challenge Name</th>
+                                <th>Status</th>
+                                <th>Difficulty</th>
+                                <th>Completions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CH001</td>
+                                <td>Snack Cryptography</td>
+                                <td class="status-success">Active</td>
+                                <td>Easy</td>
+                                <td>47</td>
+                                <td>
+                                    <button>Edit</button>
+                                    <button class="danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CH002</td>
+                                <td>Shadow CTF</td>
+                                <td class="status-success">Active</td>
+                                <td>Medium</td>
+                                <td>23</td>
+                                <td>
+                                    <button>Edit</button>
+                                    <button class="danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CH003</td>
+                                <td>DNS Treasure Hunt</td>
+                                <td class="status-success">Active</td>
+                                <td>Hard</td>
+                                <td>12</td>
+                                <td>
+                                    <button>Edit</button>
+                                    <button class="danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CH004</td>
+                                <td>Master Key Challenge</td>
+                                <td class="status-warning">Locked</td>
+                                <td>Expert</td>
+                                <td>0</td>
+                                <td>
+                                    <button>Edit</button>
+                                    <button>Enable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CH005</td>
+                                <td>Hidden Binary Challenge</td>
+                                <td class="status-error">Inactive</td>
+                                <td>Extreme</td>
+                                <td>0</td>
+                                <td>
+                                    <button>Edit</button>
+                                    <button>Enable</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Security Keys Panel -->
+                <div class="panel" id="keys">
+                    <div class="panel-header">
+                        <div class="panel-title">SECURITY KEYS</div>
+                        <div class="control-buttons">
+                            <button>GENERATE NEW</button>
+                            <button class="danger">REVOKE ALL</button>
+                        </div>
+                    </div>
+                    
+                    <p class="warning">WARNING: Viewing or modifying challenge keys can compromise challenge integrity.</p>
+                    
+                    <h3>Active Challenge Keys</h3>
+                    <div class="secret-key" data-key="FEED-C0DE-CAFE-1337">Challenge 01 Key (click to reveal)</div>
+                    <div class="secret-key" data-key="SH4D0W-FL4G-XDR-8675">Challenge 02 Key (click to reveal)</div>
+                    <div class="secret-key" data-key="E-WASTE-P1R4CY-2025">Challenge 03 Key (click to reveal)</div>
+                    
+                    <h3>Master Keys</h3>
+                    <div class="secret-key" data-key="5N4CK-H4CK-SP4CE-C0N-M45T3R-K3Y-2025">Master Key (click to reveal)</div>
+                    
+                    <h3>Administrative Override Keys</h3>
+                    <div class="secret-key" data-key="4DM1N-0V3RR1D3-2025-5N4CK">Admin Override (click to reveal)</div>
+                    <div class="secret-key" data-key="3M3RG3NCY-R3S3T-C0D3-9876">Emergency Reset (click to reveal)</div>
+                </div>
+                
+                <!-- Other panels would be implemented in a similar way -->
+                <div class="panel" id="participants">
+                    <div class="panel-header">
+                        <div class="panel-title">PARTICIPANT DATA</div>
+                        <div class="control-buttons">
+                            <button>EXPORT CSV</button>
+                        </div>
+                    </div>
+                    
+                    <p>Participant information is encrypted and requires additional authentication.</p>
+                    <button>REQUEST ACCESS</button>
+                </div>
+                
+                <div class="panel" id="logs">
+                    <div class="panel-header">
+                        <div class="panel-title">SYSTEM LOGS</div>
+                        <div class="control-buttons">
+                            <button>CLEAR LOGS</button>
+                        </div>
+                    </div>
+                    
+                    <p>System logs available for the last 72 hours.</p>
+                    <button>VIEW FULL LOGS</button>
+                </div>
+                
+                <div class="panel" id="settings">
+                    <div class="panel-header">
+                        <div class="panel-title">SYSTEM SETTINGS</div>
+                        <div class="control-buttons">
+                            <button>SAVE CHANGES</button>
+                        </div>
+                    </div>
+                    
+                    <p>System configuration requires additional privileges.</p>
+                    <button>REQUEST ACCESS</button>
+                </div>
+                
+                <div class="panel" id="lockdown">
+                    <div class="panel-header">
+                        <div class="panel-title">EMERGENCY LOCKDOWN</div>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 40px 0;">
+                        <p>WARNING: Activating emergency lockdown will disable all challenges and log out all participants.</p>
+                        <p>This should only be used in case of critical system compromise.</p>
+                        <button class="danger" style="padding: 15px 30px; margin-top: 20px;">ACTIVATE EMERGENCY LOCKDOWN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>SnackSpaceCon Admin Portal v2.5.0 | Last Updated: 2025-04-30</p>
+            <p>For technical support, contact: admin@snackspacecon.com</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Handle panel switching
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('click', function() {
+                // Update active menu item
+                document.querySelectorAll('.sidebar-menu li').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show the corresponding panel
+                const panelId = this.getAttribute('data-panel');
+                document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+                document.getElementById(panelId).classList.add('active');
+            });
+        });
+        
+        // Handle login form
+        document.getElementById('login-button').addEventListener('click', function() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const token = document.getElementById('token').value.trim();
+            
+            // Always show error regardless of input
+            document.getElementById('error-message').style.display = 'block';
+            
+            // If they try "admin" / "admin" / "1337", show a special hint
+            if (username === 'admin' && password === 'admin' && token === '1337') {
+                document.getElementById('error-message').textContent = 'Nice try! But the real admin credentials are much more secure. Try harder!';
+            }
+            
+            // If they try specific credentials, let them in
+            if (username === 'organizer' && password === 'Sn4ckH4ck2025!' && token === '314159') {
+                document.getElementById('login-overlay').style.display = 'none';
+            }
+        });
+        
+        // Hint button functionality
+        document.getElementById('login-hint').addEventListener('click', function() {
+            alert('HINT: Standard credentials won\'t work. Look for the emergency override instructions in the system documentation. Default credentials may be in /config-backup/admin-creds.txt');
+        });
+        
+        // Secret key reveal functionality
+        document.querySelectorAll('.secret-key').forEach(key => {
+            key.addEventListener('click', function() {
+                if (this.classList.contains('revealed')) {
+                    this.textContent = this.textContent.replace(this.getAttribute('data-key'), 'click to reveal');
+                    this.classList.remove('revealed');
+                } else {
+                    this.textContent = this.textContent.replace('click to reveal', this.getAttribute('data-key'));
+                    this.classList.add('revealed');
+                }
+            });
+        });
+        
+        // Backdoor access for the challenge
+        // Easter egg: Pressing 'Ctrl + Alt + Backspace' will bypass the login
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key === 'Backspace') {
+                document.getElementById('login-overlay').style.display = 'none';
+                console.log('Admin backdoor activated. Use caution.');
+            }
+        });
+        
+        // Hidden console messages
+        console.log('SnackSpaceCon Admin Portal loaded successfully');
+        console.log('HINT: The admin override key is 4DM1N-0V3RR1D3-2025-5N4CK');
+        console.log('NOTE: Emergency access can be granted using the keyboard sequence [Ctrl + Alt + Backspace]');
+        
+        // The "real" master override key is hidden in this comment: 
+        // M45T3R-0V3RR1D3-K3Y-5NAK-C0D3
+    </script>
+</body>
+</html>
