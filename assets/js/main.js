@@ -234,35 +234,150 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update countdown every second
     setInterval(updateCountdown, 1000);
     
-    // Audio player functionality
-    const audioPlayer = document.getElementById('audio-player');
-    const audioElement = document.getElementById('background-music');
-    const toggleButton = document.getElementById('toggle-audio');
-    const volumeSlider = document.getElementById('volume-slider');
-    
-    if (audioPlayer && audioElement && toggleButton) {
+    // ==========================================
+    // FIXED AUDIO PLAYER FUNCTIONALITY
+    // ==========================================
+    function setupAudioPlayer() {
+        const toggleButton = document.getElementById('toggle-audio');
+        const nextTrackButton = document.getElementById('next-track');
+        const volumeSlider = document.getElementById('volume-slider');
+        const audioElement = document.getElementById('background-music');
+        const miniPlayer = document.getElementById('mini-player');
+        const audioPlayer = document.getElementById('audio-player');
+        
+        if (!toggleButton || !audioElement) return;
+        
+        // Audio tracks
+        const tracks = [
+            {
+                name: '5N4CK_TUN3',
+                url: 'https://soundimage.org/wp-content/uploads/2017/07/Arcade-Puzzler.mp3'
+            },
+            {
+                name: 'CYPH3R_B34T',
+                url: 'https://soundimage.org/wp-content/uploads/2020/02/EKM-Like-That-Also.mp3'
+            },
+            {
+                name: 'H4CK_W4V3',
+                url: 'https://soundimage.org/wp-content/uploads/2016/01/Puzzle-Game-3.mp3'
+            }
+        ];
+        
+        let currentTrackIndex = 0;
+        
+        // Set preload attribute to ensure audio is ready
+        audioElement.preload = 'auto';
+        
         // Toggle play/pause
         toggleButton.addEventListener('click', function() {
             if (audioElement.paused) {
-                // Explicitly load before playing
+                // Explicitly load and play with error handling
                 audioElement.load();
-                audioElement.play().catch(error => {
-                    console.error('Error playing audio:', error);
-                });
-                this.textContent = 'PAUSE 5N4CK_TUN3';
+                const playPromise = audioElement.play();
+                
+                // Handle play promise (required for modern browsers)
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Playback started successfully
+                        this.textContent = 'PAUSE ' + tracks[currentTrackIndex].name;
+                    }).catch(error => {
+                        // Playback failed
+                        console.error('Error playing audio:', error);
+                        this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+                        // Show error to user (optional)
+                        // alert('Audio playback failed. Please try again.');
+                    });
+                }
             } else {
                 audioElement.pause();
-                this.textContent = 'PLAY 5N4CK_TUN3';
+                this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
             }
         });
+        
+        // Next track
+        if (nextTrackButton) {
+            nextTrackButton.addEventListener('click', function() {
+                currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+                
+                // Update source and load before attempting to play
+                audioElement.src = tracks[currentTrackIndex].url;
+                audioElement.load();
+                
+                // Update button text
+                toggleButton.textContent = audioElement.paused ? 
+                    'PLAY ' + tracks[currentTrackIndex].name : 
+                    'PAUSE ' + tracks[currentTrackIndex].name;
+                
+                // If was playing, continue playing the new track
+                if (!audioElement.paused) {
+                    const playPromise = audioElement.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.error('Error playing after track change:', error);
+                            toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+                        });
+                    }
+                }
+            });
+        }
         
         // Volume control
         if (volumeSlider) {
             volumeSlider.addEventListener('input', function() {
                 audioElement.volume = this.value;
             });
+            
+            // Set initial volume from slider
+            audioElement.volume = volumeSlider.value;
         }
+        
+        // Mini player toggle
+        if (miniPlayer && audioPlayer) {
+            const minimizeButton = document.createElement('button');
+            minimizeButton.textContent = '_';
+            minimizeButton.style.background = 'transparent';
+            minimizeButton.style.border = 'none';
+            minimizeButton.style.color = 'white';
+            minimizeButton.style.cursor = 'pointer';
+            minimizeButton.style.padding = '5px';
+            minimizeButton.style.marginLeft = '5px';
+            
+            const windowControls = document.querySelector('.window-controls');
+            if (windowControls) {
+                windowControls.appendChild(minimizeButton);
+            }
+            
+            minimizeButton.addEventListener('click', function() {
+                audioPlayer.style.display = 'none';
+                miniPlayer.style.display = 'flex';
+            });
+            
+            miniPlayer.addEventListener('click', function() {
+                miniPlayer.style.display = 'none';
+                audioPlayer.style.display = 'flex';
+            });
+        }
+        
+        // Error handling for audio element
+        audioElement.addEventListener('error', function(e) {
+            console.error('Audio error:', e);
+            if (audioElement.error) {
+                console.error('Audio error code:', audioElement.error.code);
+                console.error('Audio error message:', audioElement.error.message);
+            }
+            
+            // Try to recover after a short delay
+            setTimeout(() => {
+                audioElement.load();
+                // Optionally try to play again if it was supposed to be playing
+                // if (!audioElement.paused) audioElement.play().catch(e => console.error('Recovery failed:', e));
+            }, 1000);
+        });
     }
+    
+    // Initialize audio player
+    setupAudioPlayer();
     
     // Initialize challenges.js functionality if available
     if (window.snackspacecon) {
