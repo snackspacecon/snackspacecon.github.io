@@ -1,64 +1,184 @@
 /**
  * SnackSpaceCon Challenges
- * Main JavaScript file for challenge functionality
  */
 
-// Configuration
+function _s1(arr) {
+    return arr.map(c => String.fromCharCode(c)).join('');
+}
+
+function _s2(str, shift = 3) {
+    const decoded = atob(str);
+    return decoded.split('').map(char => {
+        if (char.match(/[A-Za-z0-9]/)) {
+            const code = char.charCodeAt(0);
+            if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+                return String.fromCharCode(((code - (code <= 90 ? 65 : 97) + shift) % 26) + (code <= 90 ? 65 : 97));
+            } else if (code >= 48 && code <= 57) {
+                return String.fromCharCode(((code - 48 + shift) % 10) + 48);
+            }
+        }
+        return char;
+    }).join('');
+}
+
+function _s3(encoded, key = "5N4CK5P4C3") {
+    const bytes = atob(encoded).split('').map(char => char.charCodeAt(0));
+    const keyBytes = key.split('').map(char => char.charCodeAt(0));
+
+    return bytes.map((byte, i) => {
+        return String.fromCharCode(byte ^ keyBytes[i % keyBytes.length]);
+    }).join('');
+}
+
+function _s4(str) {
+    let decoded = atob(str);
+
+    const substitution = {
+        'a': 'n', 'b': 'o', 'c': 'p', 'd': 'q', 'e': 'r', 'f': 's', 'g': 't',
+        'h': 'u', 'i': 'v', 'j': 'w', 'k': 'x', 'l': 'y', 'm': 'z', 'n': 'a',
+        'o': 'b', 'p': 'c', 'q': 'd', 'r': 'e', 's': 'f', 't': 'g', 'u': 'h',
+        'v': 'i', 'w': 'j', 'x': 'k', 'y': 'l', 'z': 'm', 'A': 'N', 'B': 'O',
+        'C': 'P', 'D': 'Q', 'E': 'R', 'F': 'S', 'G': 'T', 'H': 'U', 'I': 'V',
+        'J': 'W', 'K': 'X', 'L': 'Y', 'M': 'Z', 'N': 'A', 'O': 'B', 'P': 'C',
+        'Q': 'D', 'R': 'E', 'S': 'F', 'T': 'G', 'U': 'H', 'V': 'I', 'W': 'J',
+        'X': 'K', 'Y': 'L', 'Z': 'M', '0': '5', '1': '6', '2': '7', '3': '8',
+        '4': '9', '5': '0', '6': '1', '7': '2', '8': '3', '9': '4', '-': '_',
+        '_': '-'
+    };
+
+    return decoded.split('').map(char => substitution[char] || char).join('');
+}
+
 const CHALLENGES = {
-    // Challenge 1: Snack Cryptography
     snackCrypto: {
-        key: 'FEED-C0DE-CAFE-1337',
+        key: () => _s1([70, 69, 69, 68, 45, 67, 48, 68, 69, 45, 67, 65, 70, 69, 45, 49, 51, 51, 55]),
         submissionUrl: '/submit.html',
         completed: false
     },
-    
-    // Challenge 2: Shadow CTF
+
     shadowCTF: {
-        key: 'SH4D0W-FL4G-XDR-8675',
-        hiddenData: 'U2VjcmV0IGtleSBmb3IgU2hhZG93IENURjogVVhCTFIxSkZRdz09', // Base64 encoded
+        key: () => _s2("U0g0RDBXLUZMNEctWERSLTg2NzU="),
+        hiddenData: 'U2VjcmV0IGtleSBmb3IgU2hhZG93IENURjogVVhCTFIxSkZRdz09',
         completed: false
     },
-    
-    // Challenge 3: DNS Challenge
+
     dnsChallenge: {
-        key: 'E-WASTE-P1R4CY-2025',
+        key: () => _s3("RVRWQVVFVldLVkl5UXpsdFNGRlJQUT09"),
         startingDomain: 'start.hunt.snackspacecon.com',
         completed: false
     },
-    
-    // Master Key Challenge
+
     masterKey: {
-        key: '5N4CK-H4CK-SP4CE-C0N-M45T3R-K3Y-2025',
+        key: () => _s4("TlU0UEtzVTRRMGxmVUZSSFJVOVBUa3RUTlUxVE0xSWZVemxaV1ZzeVJGRXdNakE9"),
         completed: false,
-        location: "The abandoned warehouse at coordinates 38.7749° N, 90.6661° W. Enter through the loading dock and follow the blinking LEDs."
+        location: () => {
+            const p1 = _s1([84, 104, 101, 32, 97, 98, 97, 110, 100, 111, 110, 101, 100, 32, 119, 97, 114, 101, 104, 111, 117, 115, 101, 32, 97, 116]);
+            const p2 = _s2("Y29vcmRpbmF0ZXMgMzguNzc0OcKwIE4sIDkwLjY2NjHCsCBXLg==");
+            const p3 = _s3("RldaelhsUWdiM1Z1SUhSb2NtOTFaMmdnZEdobElHeHZZV1JwYm1jZ1pHOWpheUJoYm1RZ1ptOXNiRzkzSUhSb1pTQmliR2x1YTJsdVp5QkZSRk11");
+            return `${p1} ${p2} ${p3}`;
+        }
     }
 };
 
-// Storage for challenge progress
+const _keyVerifiers = {
+    verifySnackCrypto: (input) => {
+        const key = CHALLENGES.snackCrypto.key();
+
+        const inputSum = input.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        const keySum = key.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+        return inputSum === keySum && input === key;
+    },
+
+    verifyShadowCTF: (input) => {
+        const salt = "5n4ck";
+        const key = CHALLENGES.shadowCTF.key();
+
+        return input === key &&
+        (salt + input).length === (salt + key).length;
+    },
+
+    verifyDNSChallenge: (input) => {
+        const key = CHALLENGES.dnsChallenge.key();
+
+        const hash = (str) => {
+            return str.split('').reduce((hash, char, i) => {
+                return ((hash << 5) - hash) + char.charCodeAt(0) + i;
+            }, 0);
+        };
+
+        return hash(input) === hash(key) && input === key;
+    },
+
+    verifyMasterKey: (input) => {
+        const key = CHALLENGES.masterKey.key();
+
+        const parts = key.split('-');
+        const inputParts = input.split('-');
+
+        if (parts.length !== inputParts.length) return false;
+
+        for (let i = 0; i < parts.length; i++) {
+            if (parts[i] !== inputParts[i]) return false;
+        }
+
+        return true;
+    }
+};
+
 class ChallengeStorage {
     constructor() {
         this.storageKey = 'snackspacecon_progress';
         this.progress = this.loadProgress();
+
+        this._validateStorage();
     }
-    
-    loadProgress() {
-        const stored = localStorage.getItem(this.storageKey);
-        return stored ? JSON.parse(stored) : {
-            challenges: {
-                snackCrypto: { completed: false, timestamp: null },
-                shadowCTF: { completed: false, timestamp: null },
-                dnsChallenge: { completed: false, timestamp: null },
-                masterKey: { completed: false, timestamp: null }
-            },
-            discoveredHints: [],
-            konami: false
+
+    _validateStorage() {
+        const getChecksum = (obj) => {
+            const str = JSON.stringify(obj);
+            return str.split('').reduce((a, b) => {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0);
         };
+
+        this.progress._checksum = getChecksum(this.progress.challenges);
     }
-    
+
+    loadProgress() {
+        try {
+            const stored = localStorage.getItem(this.storageKey);
+            return stored ? JSON.parse(stored) : {
+                challenges: {
+                    snackCrypto: { completed: false, timestamp: null },
+                    shadowCTF: { completed: false, timestamp: null },
+                    dnsChallenge: { completed: false, timestamp: null },
+                    masterKey: { completed: false, timestamp: null }
+                },
+                discoveredHints: [],
+                konami: false
+            };
+        } catch (e) {
+            console.error('Error loading progress:', e);
+            return {
+                challenges: {
+                    snackCrypto: { completed: false, timestamp: null },
+                    shadowCTF: { completed: false, timestamp: null },
+                    dnsChallenge: { completed: false, timestamp: null },
+                    masterKey: { completed: false, timestamp: null }
+                },
+                discoveredHints: [],
+                konami: false
+            };
+        }
+    }
+
     saveProgress() {
+        this._validateStorage();
         localStorage.setItem(this.storageKey, JSON.stringify(this.progress));
     }
-    
+
     completeChallenge(challengeName) {
         if (this.progress.challenges[challengeName]) {
             this.progress.challenges[challengeName].completed = true;
@@ -68,33 +188,32 @@ class ChallengeStorage {
         }
         return false;
     }
-    
+
     addDiscoveredHint(hint) {
         if (!this.progress.discoveredHints.includes(hint)) {
             this.progress.discoveredHints.push(hint);
             this.saveProgress();
         }
     }
-    
+
     resetProgress() {
         localStorage.removeItem(this.storageKey);
         this.progress = this.loadProgress();
+        this._validateStorage();
     }
-    
+
     isKonamiActivated() {
         return this.progress.konami;
     }
-    
+
     activateKonami() {
         this.progress.konami = true;
         this.saveProgress();
     }
 }
 
-// Initialize storage
 const storage = new ChallengeStorage();
 
-// Console functionality 
 class ConsoleTerminal {
     constructor(inputElement, outputElement) {
         this.inputElement = inputElement;
@@ -113,12 +232,13 @@ class ConsoleTerminal {
             'clear': this.cmdClear.bind(this),
             'reset': this.cmdReset.bind(this)
         };
-        
+
+        this._commandAttempts = {};
+
         this.setupListeners();
     }
-    
+
     setupListeners() {
-        // Set up the input listeners
         if (this.inputElement) {
             this.inputElement.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
@@ -148,37 +268,70 @@ class ConsoleTerminal {
             });
         }
     }
-    
+
+    _isRateLimited(cmd) {
+        const now = Date.now();
+        const ratelimitCommands = ['masterkey', 'decrypt'];
+
+        if (ratelimitCommands.includes(cmd)) {
+            if (!this._commandAttempts[cmd]) {
+                this._commandAttempts[cmd] = { lastAttempt: now, attempts: 1 };
+                return false;
+            }
+
+            const commandData = this._commandAttempts[cmd];
+
+            if (now - commandData.lastAttempt > 30000) {
+                commandData.attempts = 1;
+                commandData.lastAttempt = now;
+                return false;
+            }
+
+            if (commandData.attempts >= 5) {
+                return true;
+            }
+
+            commandData.attempts++;
+            commandData.lastAttempt = now;
+        }
+
+        return false;
+    }
+
     processCommand(input) {
-        // Parse the command and arguments
         const parts = input.split(' ');
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
-        
-        // Output the command to the console
+
         this.appendOutput(`> ${input}`);
-        
-        // Check if command exists and execute it
+
+        if (this._isRateLimited(cmd)) {
+            this.appendOutput('RATE LIMITED: Too many attempts. Please wait 30 seconds.');
+            return;
+        }
+
         if (cmd in this.commands) {
             this.commands[cmd](args);
         } else {
-            this.appendOutput('Command not found. Type "help" for available commands.');
+            const responses = [
+                'Command not found. Type "help" for available commands.',
+                'Unknown command. Try "help" to see what\'s available.',
+                'Error: Unrecognized input. Use "help" for command list.'
+            ];
+            this.appendOutput(responses[Math.floor(Math.random() * responses.length)]);
         }
     }
-    
+
     appendOutput(text) {
-        // Create a new div for the output
         const outputLine = document.createElement('div');
         outputLine.textContent = text;
-        
-        // Add the line to the output
+
         if (this.outputElement) {
             this.outputElement.appendChild(outputLine);
-            // Auto-scroll to bottom
             this.outputElement.scrollTop = this.outputElement.scrollHeight;
         }
     }
-    
+
     cmdHelp() {
         this.appendOutput('Available commands:');
         this.appendOutput('  help       - Show this help message');
@@ -192,51 +345,51 @@ class ConsoleTerminal {
         this.appendOutput('  clear      - Clear the console');
         this.appendOutput('  reset      - Reset challenge progress');
     }
-    
+
     cmdDate() {
         this.appendOutput('SNACKSPACECON DATES: MAY 11-15, 2025');
         this.appendOutput('Running parallel to the official conference.');
         this.appendOutput('Countdown active: Check main page for exact timing.');
     }
-    
+
     cmdLocation(args) {
         const allChallengesCompleted = Object.values(storage.progress.challenges)
-            .every(challenge => challenge.completed);
-            
+        .every(challenge => challenge.completed);
+
         if (allChallengesCompleted || storage.isKonamiActivated()) {
             this.appendOutput('DECRYPTING LOCATION DATA...');
             this.appendOutput('');
-            this.appendOutput(CHALLENGES.masterKey.location);
+            this.appendOutput(CHALLENGES.masterKey.location());
         } else {
             this.appendOutput('ACCESS DENIED: Complete all challenges to unlock location.');
             this.appendOutput('Alternatively, a master key is required.');
         }
     }
-    
+
     cmdChallenge() {
         this.appendOutput('ACTIVE CHALLENGES:');
         this.appendOutput('');
         this.appendOutput('1. SNACK CRYPTOGRAPHY');
-        const challenge1Status = storage.progress.challenges.snackCrypto.completed ? 
-            'COMPLETED' : 'IN PROGRESS';
+        const challenge1Status = storage.progress.challenges.snackCrypto.completed ?
+        'COMPLETED' : 'IN PROGRESS';
         this.appendOutput(`   Status: ${challenge1Status}`);
         this.appendOutput('   Hint: Not all pages are meant to be found through normal navigation.');
         this.appendOutput('');
-        
+
         this.appendOutput('2. SHADOW CTF');
-        const challenge2Status = storage.progress.challenges.shadowCTF.completed ? 
-            'COMPLETED' : 'IN PROGRESS';
+        const challenge2Status = storage.progress.challenges.shadowCTF.completed ?
+        'COMPLETED' : 'IN PROGRESS';
         this.appendOutput(`   Status: ${challenge2Status}`);
         this.appendOutput('   Hint: Shadows exist in the paths between rendered pixels.');
         this.appendOutput('');
-        
+
         this.appendOutput('3. DNS TREASURE HUNT');
-        const challenge3Status = storage.progress.challenges.dnsChallenge.completed ? 
-            'COMPLETED' : 'IN PROGRESS';
+        const challenge3Status = storage.progress.challenges.dnsChallenge.completed ?
+        'COMPLETED' : 'IN PROGRESS';
         this.appendOutput(`   Status: ${challenge3Status}`);
         this.appendOutput('   Hint: The journey begins at start.hunt.snackspacecon.com');
     }
-    
+
     cmdSnack() {
         this.appendOutput('SNACK PARTICIPATION REQUIREMENTS:');
         this.appendOutput('');
@@ -247,7 +400,7 @@ class ConsoleTerminal {
         this.appendOutput('');
         this.appendOutput('Submit your concept through Challenge 01 (Snack Cryptography)');
     }
-    
+
     cmdKonami() {
         if (storage.isKonamiActivated()) {
             this.appendOutput('Konami code already activated!');
@@ -257,50 +410,47 @@ class ConsoleTerminal {
             this.appendOutput('Perhaps a certain sequence of inputs might reveal something?');
         }
     }
-    
+
     cmdMasterKey(args) {
         if (args.length === 0) {
             this.appendOutput('Usage: masterkey [key]');
             return;
         }
-        
+
         const attemptedKey = args.join(' ');
-        
-        if (attemptedKey === CHALLENGES.masterKey.key) {
+
+        if (_keyVerifiers.verifyMasterKey(attemptedKey)) {
             this.appendOutput('MASTER KEY VERIFIED!');
             this.appendOutput('ACCESS GRANTED TO ALL SYSTEMS');
             storage.completeChallenge('masterKey');
-            
-            // Unlock location
+
             this.appendOutput('');
             this.appendOutput('LOCATION DATA DECRYPTED:');
-            this.appendOutput(CHALLENGES.masterKey.location);
+            this.appendOutput(CHALLENGES.masterKey.location());
         } else {
             this.appendOutput('INVALID MASTER KEY');
             this.appendOutput('Access denied.');
         }
     }
-    
+
     cmdDecrypt(args) {
         if (args.length < 2) {
             this.appendOutput('Usage: decrypt [text] [key]');
             return;
         }
-        
+
         const encryptedText = args[0];
         const key = args[1];
-        
-        // This is a simulated decryption - in reality it just checks for specific
-        // combinations that reveal hints
-        if (encryptedText === 'location.dat' && key === CHALLENGES.snackCrypto.key) {
+
+        if (encryptedText === 'location.dat' && _keyVerifiers.verifySnackCrypto(key)) {
             this.appendOutput('Partial decryption successful.');
             this.appendOutput('Fragment revealed: "SP4CE-C0N"');
             storage.addDiscoveredHint('SP4CE-C0N');
-        } else if (encryptedText === 'shadow.bin' && key === CHALLENGES.shadowCTF.key) {
+        } else if (encryptedText === 'shadow.bin' && _keyVerifiers.verifyShadowCTF(key)) {
             this.appendOutput('Partial decryption successful.');
             this.appendOutput('Fragment revealed: "M45T3R-K3Y"');
             storage.addDiscoveredHint('M45T3R-K3Y');
-        } else if (encryptedText === 'dns.dat' && key === CHALLENGES.dnsChallenge.key) {
+        } else if (encryptedText === 'dns.dat' && _keyVerifiers.verifyDNSChallenge(key)) {
             this.appendOutput('Partial decryption successful.');
             this.appendOutput('Fragment revealed: "2025"');
             storage.addDiscoveredHint('2025');
@@ -308,17 +458,17 @@ class ConsoleTerminal {
             this.appendOutput('Decryption failed. Invalid text/key combination.');
         }
     }
-    
+
     cmdClear() {
         if (this.outputElement) {
             this.outputElement.innerHTML = '';
         }
     }
-    
+
     cmdReset() {
         this.appendOutput('WARNING: This will reset all challenge progress.');
         this.appendOutput('To confirm, type "reset confirm"');
-        
+
         if (arguments[0] && arguments[0][0] === 'confirm') {
             storage.resetProgress();
             this.appendOutput('Challenge progress has been reset.');
@@ -326,69 +476,40 @@ class ConsoleTerminal {
     }
 }
 
-// DNS Challenge Simulator
 class DNSChallengeSimulator {
     constructor() {
-        this.dnsRecords = {
-            // TXT records
-            'start.hunt.snackspacecon.com': {
-                TXT: 'Begin your quest. What type of record points to other names? Follow the CNAME path.'
-            },
-            'sixth.clue.snackspacecon.com': {
-                TXT: 'The mail must flow. Who\'s responsible for mail exchange?'
-            },
-            'mail.puzzle.snackspacecon.com': {
-                TXT: 'RS1XQVNURSBpcyBvbmx5IHRoZSBiZWdpbm5pbmc=' // Base64: "E-WASTE is only the beginning"
-            },
-            
-            // CNAME records
-            'start.hunt.snackspacecon.com': {
-                CNAME: 'first.clue.snackspacecon.com'
-            },
-            'first.clue.snackspacecon.com': {
-                CNAME: 'second.clue.snackspacecon.com'
-            },
-            'second.clue.snackspacecon.com': {
-                CNAME: 'third.clue.snackspacecon.com'
-            },
-            'third.clue.snackspacecon.com': {
-                CNAME: 'fourth.clue.snackspacecon.com'
-            },
-            'fourth.clue.snackspacecon.com': {
-                CNAME: 'fifth.clue.snackspacecon.com'
-            },
-            'fifth.clue.snackspacecon.com': {
-                CNAME: 'sixth.clue.snackspacecon.com'
-            },
-            
-            // MX records
-            'sixth.clue.snackspacecon.com': {
-                MX: 'mail.puzzle.snackspacecon.com'
-            },
-            
-            // A records (IP addresses that convert to ASCII)
-            'pieces.puzzle.snackspacecon.com': {
-                A: ['192.80.73.82', '65.67.89.45', '50.48.50.53'] // ASCII: P1R4CY-2025
-            },
-            
-            // PTR record for the final confirmation
-            'e-waste-p1r4cy-2025.final.snackspacecon.com': {
-                PTR: 'E-WASTE-P1R4CY-2025'
+        const encodedRecords = "eyIgVFhUIHJlY29yZHMiOnsic3RhcnQuaHVudC5zbmFja3NwYWNlY29uLmNvbSI6eyJUWFQiOiJCZWdpbiB5b3VyIHF1ZXN0LiBXaGF0IHR5cGUgb2YgcmVjb3JkIHBvaW50cyB0byBvdGhlciBuYW1lcz8gRm9sbG93IHRoZSBDTkFNRSBwYXRoLiJ9LCJzaXh0aC5jbHVlLnNuYWNrc3BhY2Vjb24uY29tIjp7IlRYVCI6IlRoZSBtYWlsIG11c3QgZmxvdy4gV2hvJ3MgcmVzcG9uc2libGUgZm9yIG1haWwgZXhjaGFuZ2U/In0sIm1haWwucHV6emxlLnNuYWNrc3BhY2Vjb24uY29tIjp7IlRYVCI6IlJTMVhRVk5VUlNCcGN5QnZibXg1SUhSb1pTQmlaV2RwYm01cGJtYz0ifX0sIiBDTkFNRSByZWNvcmRzIjp7InN0YXJ0Lmh1bnQuc25hY2tzcGFjZWNvbi5jb20iOnsiQ05BTUUiOiJmaXJzdC5jbHVlLnNuYWNrc3BhY2Vjb24uY29tIn0sImZpcnN0LmNsdWUuc25hY2tzcGFjZWNvbi5jb20iOnsiQ05BTUUiOiJzZWNvbmQuY2x1ZS5zbmFja3NwYWNlY29uLmNvbSJ9LCJzZWNvbmQuY2x1ZS5zbmFja3NwYWNlY29uLmNvbSI6eyJDTkFNRSI6InRoaXJkLmNsdWUuc25hY2tzcGFjZWNvbi5jb20ifSwidGhpcmQuY2x1ZS5zbmFja3NwYWNlY29uLmNvbSI6eyJDTkFNRSI6ImZvdXJ0aC5jbHVlLnNuYWNrc3BhY2Vjb24uY29tIn0sImZvdXJ0aC5jbHVlLnNuYWNrc3BhY2Vjb24uY29tIjp7IkNOQU1FIjoiZmlmdGguY2x1ZS5zbmFja3NwYWNlY29uLmNvbSJ9LCJmaWZ0aC5jbHVlLnNuYWNrc3BhY2Vjb24uY29tIjp7IkNOQU1FIjoic2l4dGguY2x1ZS5zbmFja3NwYWNlY29uLmNvbSJ9fSwiIE1YIHJlY29yZHMiOnsic2l4dGguY2x1ZS5zbmFja3NwYWNlY29uLmNvbSI6eyJNWCI6Im1haWwucHV6emxlLnNuYWNrc3BhY2Vjb24uY29tIn19LCIgQSByZWNvcmRzIjp7InBpZWNlcy5wdXp6bGUuc25hY2tzcGFjZWNvbi5jb20iOnsiQSI6WyIxOTIuODAuNzMuODIiLCI2NS42Ny44OS40NSIsIjUwLjQ4LjUwLjUzIl19fSwiIFBUUiByZWNvcmQiOnsiZS13YXN0ZS1wMXI0Y3ktMjAyNS5maW5hbC5zbmFja3NwYWNlY29uLmNvbSI6eyJQVFIiOiJFLVdBU1RFLVBDWU9QWSAyMDI1In19fQ==";
+
+        this._getRecords = () => {
+            try {
+                return JSON.parse(atob(encodedRecords));
+            } catch (e) {
+                console.error('Error loading DNS records:', e);
+                return {};
             }
         };
     }
-    
+
     lookupRecord(domain, recordType) {
-        if (this.dnsRecords[domain] && this.dnsRecords[domain][recordType]) {
-            return this.dnsRecords[domain][recordType];
+        const records = this._getRecords();
+
+        let category = null;
+        if (recordType === 'TXT') category = ' TXT records';
+        else if (recordType === 'CNAME') category = ' CNAME records';
+        else if (recordType === 'MX') category = ' MX records';
+        else if (recordType === 'A') category = ' A records';
+        else if (recordType === 'PTR') category = ' PTR record';
+
+        if (!category || !records[category] || !records[category][domain]) {
+            return null;
         }
-        return null;
+
+        return records[category][domain][recordType];
     }
-    
-    // A simple interface to simulate DNS queries for the challenge
+
     simulateDNSQuery(domain, recordType) {
         const result = this.lookupRecord(domain, recordType);
-        
+
         if (result) {
             return {
                 success: true,
@@ -407,217 +528,269 @@ class DNSChallengeSimulator {
     }
 }
 
-// Initialize DNS Challenge
 const dnsChallenge = new DNSChallengeSimulator();
 
-// Konami Code detector
+const _debugDetection = (() => {
+    let isDebuggerPresent = false;
+
+    const startTime = performance.now();
+
+    function checkDebugger() {
+        const functionString = checkDebugger.toString();
+        return functionString.length !== checkDebugger.toString().length;
+    }
+
+    const timeCheckInterval = setInterval(() => {
+        const currentTime = performance.now();
+        const elapsedTime = currentTime - startTime;
+
+        if (elapsedTime > 2000 && !isDebuggerPresent) {
+            isDebuggerPresent = true;
+            console.warn("This challenge is designed to be solved through inspection, but direct manipulation is not part of the game. Let's play fair!");
+
+            for (const challenge in CHALLENGES) {
+                const original = CHALLENGES[challenge].key;
+                CHALLENGES[challenge].key = () => {
+                    if (isDebuggerPresent) {
+                        return "NICE-TRY-H4CK3R-" + Math.floor(Math.random() * 10000);
+                    }
+                    return original();
+                };
+            }
+        }
+    }, 1000);
+
+    const originalConsole = {
+        log: console.log,
+        warn: console.warn,
+        error: console.error
+    };
+
+    function checkConsoleOverrides() {
+        return console.log !== originalConsole.log ||
+        console.warn !== originalConsole.warn ||
+        console.error !== originalConsole.error;
+    }
+
+    function hasDebugProperties() {
+        return window.hasOwnProperty('Firebug') ||
+        window.hasOwnProperty('__REACT_DEVTOOLS_GLOBAL_HOOK__') ||
+        document.documentElement.hasAttribute('data-debug');
+    }
+
+    return {
+        isPresent: () => isDebuggerPresent || checkDebugger() || checkConsoleOverrides() || hasDebugProperties(),
+                         startDetection: () => {
+                             setInterval(() => {
+                                 if (checkDebugger() || checkConsoleOverrides() || hasDebugProperties()) {
+                                     isDebuggerPresent = true;
+                                 }
+                             }, 2000);
+                         }
+    };
+})();
+
+_debugDetection.startDetection();
+
 class KonamiCode {
     constructor(callback) {
-        this.callback = callback;
-        this.sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        this.currentIndex = 0;
-        
-        document.addEventListener('keydown', this.handleKeydown.bind(this));
+        this._sequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65].map(code =>
+        String.fromCharCode(code === 66 ? 98 : code === 65 ? 97 : code));
+        this._currentIndex = 0;
+        this._callback = callback;
+
+        this._listener = this._handleKeydown.bind(this);
+        document.addEventListener('keydown', this._listener);
+
+        this._attempts = 0;
+        this._lastAttempt = Date.now();
     }
-    
-    handleKeydown(event) {
-        // Get the key that was pressed
+
+    _handleKeydown(event) {
+        const now = Date.now();
+        if (now - this._lastAttempt > 60000) {
+            this._attempts = 0;
+        }
+
+        if (++this._attempts > 100) {
+            document.removeEventListener('keydown', this._listener);
+            return;
+        }
+
+        this._lastAttempt = now;
+
         const key = event.key.toLowerCase();
-        
-        // Check if it's the expected key in the sequence
-        if (key === this.sequence[this.currentIndex].toLowerCase()) {
-            this.currentIndex++;
-            
-            // If we've reached the end of the sequence, execute the callback
-            if (this.currentIndex === this.sequence.length) {
-                this.callback();
-                this.currentIndex = 0; // Reset for next time
+
+        const expectedKey = this._sequence[this._currentIndex];
+        const isCorrect = (key === expectedKey) ||
+        (expectedKey === 'ArrowUp' && event.keyCode === 38) ||
+        (expectedKey === 'ArrowDown' && event.keyCode === 40) ||
+        (expectedKey === 'ArrowLeft' && event.keyCode === 37) ||
+        (expectedKey === 'ArrowRight' && event.keyCode === 39);
+        if (isCorrect) {
+            this._currentIndex++;
+
+            if (this._currentIndex === this._sequence.length) {
+                setTimeout(() => {
+                    this._callback();
+                }, 500 + Math.random() * 1000);
+
+                this._currentIndex = 0;
             }
         } else {
-            // Reset if the wrong key is pressed
-            this.currentIndex = 0;
+            if (Math.random() < 0.8) {
+                this._currentIndex = 0;
+            }
         }
     }
 }
 
-// Initialize Konami code
 const konamiHandler = new KonamiCode(() => {
     if (!storage.isKonamiActivated()) {
         storage.activateKonami();
-        
-        // Show a notification
-        const notification = document.createElement('div');
-        notification.style.position = 'fixed';
-        notification.style.top = '20px';
-        notification.style.left = '50%';
-        notification.style.transform = 'translateX(-50%)';
-        notification.style.backgroundColor = 'rgba(0, 255, 255, 0.8)';
-        notification.style.color = 'black';
-        notification.style.padding = '15px';
-        notification.style.borderRadius = '5px';
-        notification.style.zIndex = '9999';
-        notification.style.fontFamily = "'VCR', monospace";
-        notification.textContent = 'KONAMI CODE ACTIVATED! Master key fragment revealed: 5N4CK-H4CK';
-        
-        document.body.appendChild(notification);
-        
-        // Remove after a few seconds
+
         setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 1s';
+            const notificationStyles = [
+                'position: fixed',
+                'top: 20px',
+                'left: 50%',
+                'transform: translateX(-50%)',
+                   'background-color: rgba(0, 255, 255, 0.8)',
+                   'color: black',
+                   'padding: 15px',
+                   'border-radius: 5px',
+                   'z-index: 9999',
+                   'font-family: \'VCR\', monospace',
+                   'box-shadow: 0 0 10px rgba(0, 255, 255, 0.5)'
+            ].join(';');
+
+            const notification = document.createElement('div');
+            notification.style = notificationStyles;
+            notification.textContent = 'KONAMI CODE ACTIVATED! Master key fragment revealed: 5N4CK-H4CK';
+
+            document.body.appendChild(notification);
+
             setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 1000);
-        }, 5000);
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 1s';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 1000);
+            }, 5000);
+        }, 1000);
     }
 });
 
-// Updated Audio Player with Local Files
-function setupAudioPlayer() {
-    const toggleButton = document.getElementById('toggle-audio');
-    const nextTrackButton = document.getElementById('next-track');
-    const volumeSlider = document.getElementById('volume-slider');
-    const audioElement = document.getElementById('background-music');
-    const miniPlayer = document.getElementById('mini-player');
-    const audioPlayer = document.getElementById('audio-player');
-    
-    if (!toggleButton || !audioElement) return;
-    
-    // Updated tracks with locally hosted audio files
-    const tracks = [
-        {
-            name: '5N4CK_TUN3',
-            url: 'assets/Arcade-Puzzler.mp3'
+function decodeSecretMenu() {
+    const menuItems = document.querySelectorAll('#secret-menu-items li') ||
+    document.querySelectorAll('.secret-menu li') ||
+    document.querySelectorAll('li[id]');
+
+    if (!menuItems || menuItems.length === 0) return null;
+
+    const approaches = {
+        idMethod: () => {
+            return Array.from(menuItems)
+            .filter(item => item.id && item.id.length === 1)
+            .map(item => item.id)
+            .join('');
         },
-        {
-            name: 'P1X3L_T0WN',
-            url: 'assets/Lifes-Good-in-Pixeltown.mp3'
+
+        letterMethod: () => {
+            return Array.from(menuItems)
+            .filter(item => !item.classList.contains('divider'))
+            .map(item => item.textContent.trim()[0])
+            .join('');
         },
-        {
-            name: 'SP4C3LY_B34T',
-            url: 'assets/Spiff-Spacely.mp3'
+
+        dataMethod: () => {
+            return Array.from(menuItems)
+            .filter(item => item.dataset && item.dataset.key)
+            .map(item => item.dataset.key)
+            .join('');
         }
+    };
+
+    const idKey = approaches.idMethod();
+    const letterKey = approaches.letterMethod();
+    const dataKey = approaches.dataMethod();
+
+    const keyParts = CHALLENGES.snackCrypto.key().split('-');
+    const formUrl = `/submit.html?key=${keyParts.join('-')}`;
+
+    return {
+        idKey: idKey,
+        letterKey: letterKey,
+        dataKey: dataKey,
+        formUrl: formUrl
+    };
+}
+
+function extractShadowData() {
+    const dataSources = [
+        document.getElementById('shadow-path'),
+        document.querySelector('path[data-secret]'),
+        document.querySelector('svg [data-secret]')
     ];
-    
-    let currentTrackIndex = 0;
-    
-    // Set initial source
-    audioElement.src = tracks[currentTrackIndex].url;
-    
-    // Set preload attribute for better performance
-    audioElement.preload = 'auto';
-    
-    // Toggle play/pause
-    toggleButton.addEventListener('click', function() {
-        if (audioElement.paused) {
-            // Explicitly load before playing
-            audioElement.load();
-            const playPromise = audioElement.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Playback started successfully
-                    this.textContent = 'PAUSE ' + tracks[currentTrackIndex].name;
-                }).catch(error => {
-                    // Playback failed
-                    console.error('Error playing audio:', error);
-                    this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
-                });
-            }
-        } else {
-            audioElement.pause();
-            this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
-        }
-    });
-    
-    // Next track
-    if (nextTrackButton) {
-        nextTrackButton.addEventListener('click', function() {
-            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-            audioElement.src = tracks[currentTrackIndex].url;
-            audioElement.load(); // Ensure we load the new source
-            
-            toggleButton.textContent = audioElement.paused ? 
-                'PLAY ' + tracks[currentTrackIndex].name : 
-                'PAUSE ' + tracks[currentTrackIndex].name;
-            
-            if (!audioElement.paused) {
-                const playPromise = audioElement.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.error('Error playing audio after track change:', error);
-                        toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
-                    });
-                }
-            }
-        });
-    }
-    
-    // Volume control
-    if (volumeSlider) {
-        volumeSlider.addEventListener('input', function() {
-            audioElement.volume = this.value;
-        });
-        
-        // Set initial volume
-        audioElement.volume = volumeSlider.value;
-    }
-    
-    // Mini player toggle
-    if (miniPlayer && audioPlayer) {
-        const minimizeButton = document.createElement('button');
-        minimizeButton.textContent = '_';
-        minimizeButton.style.background = 'transparent';
-        minimizeButton.style.border = 'none';
-        minimizeButton.style.color = 'white';
-        minimizeButton.style.cursor = 'pointer';
-        minimizeButton.style.padding = '5px';
-        minimizeButton.style.marginLeft = '5px';
-        
-        const windowControls = document.querySelector('.window-controls');
-        if (windowControls) {
-            windowControls.appendChild(minimizeButton);
-        }
-        
-        minimizeButton.addEventListener('click', function() {
-            audioPlayer.style.display = 'none';
-            miniPlayer.style.display = 'flex';
-        });
-        
-        miniPlayer.addEventListener('click', function() {
-            miniPlayer.style.display = 'none';
-            audioPlayer.style.display = 'flex';
-        });
-    }
-    
-    // Error handling
-    audioElement.addEventListener('error', function(e) {
-        console.error('Audio error:', e);
-        if (audioElement.error) {
-            console.error('Audio error code:', audioElement.error.code);
-            console.error('Audio error message:', audioElement.error.message || 'No details available');
-        }
-        
-        // Try to recover after a short delay
-        setTimeout(() => {
-            audioElement.load();
-            // Update the button text since playback failed
-            if (toggleButton) {
-                toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
-            }
-        }, 1000);
-    });
-    
-    // Initial load
+
+    const validSource = dataSources.find(source => source && source.getAttribute('data-secret'));
+
+    if (!validSource) return null;
+
+    const encodedData = validSource.getAttribute('data-secret');
+    if (!encodedData) return null;
+
     try {
-        audioElement.load();
+        let decoded = '';
+
+        if (encodedData.length % 2 === 0) {
+            let stage1 = atob(encodedData);
+
+            stage1 = stage1.split('').map(char => {
+                const code = char.charCodeAt(0);
+                if (code >= 65 && code <= 90) {
+                    return String.fromCharCode(((code - 65 + 13) % 26) + 65);
+                } else if (code >= 97 && code <= 122) {
+                    return String.fromCharCode(((code - 97 + 13) % 26) + 97);
+                }
+                return char;
+            }).join('');
+
+            decoded = atob(stage1);
+        } else {
+            const parts = [];
+
+            for (let i = 0; i < encodedData.length; i += 4) {
+                parts.push(encodedData.substring(i, i + 4));
+            }
+
+            const decodedParts = parts.map(part => {
+                try {
+                    return atob(part.padEnd(4, '='));
+                } catch (e) {
+                    return part;
+                }
+            });
+
+            decoded = atob(btoa(decodedParts.join('')));
+        }
+
+        return {
+            rawData: encodedData,
+            decoded: decoded
+        };
     } catch (e) {
-        console.error('Initial audio load failed:', e);
+        console.error('Error processing shadow data:', e);
+
+        return {
+            rawData: encodedData,
+            decoded: "Error: Data corrupted, but key format is: SH4D0W-FL4G-???"
+        };
     }
 }
 
-// Helper function to decode base64
 function decodeBase64(str) {
     try {
         return atob(str);
@@ -627,131 +800,139 @@ function decodeBase64(str) {
     }
 }
 
-// Helper function to convert ASCII values to characters
 function asciiToString(asciiValues) {
     return asciiValues.map(ip => {
         return ip.split('.').map(num => String.fromCharCode(parseInt(num))).join('');
     }).join('');
 }
 
-// DOM ready initialization
+function _decoyFunction1() {
+    return "This function does nothing useful";
+}
+
+function _decoyFunction2(input) {
+    return Array.from(input).reverse().join('');
+}
+
+function _decoyFunction3() {
+    const date = new Date();
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the console if present
-    const consoleInput = document.getElementById('console-input');
-    const consoleOutput = document.querySelector('.interactive-console');
-    
-    if (consoleInput && consoleOutput) {
-        const terminal = new ConsoleTerminal(consoleInput, consoleOutput);
-        // Make terminal accessible globally
-        window.snackspacecon.terminal = terminal;
-        
-        // Add initial welcome message
-        terminal.appendOutput('5N4CK5P4C3C0N TERMINAL v1.0');
-        terminal.appendOutput('Type "help" for available commands.');
-        terminal.appendOutput('>_');
-    }
-    
-    // Countdown timer
-    const updateCountdown = () => {
-        const eventDate = new Date('May 11, 2025 00:00:00').getTime();
-        const now = new Date().getTime();
-        const distance = eventDate - now;
-        
-        // Calculate days, hours, minutes, seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        // Format for display
-        const formattedDays = String(days).padStart(2, '0');
-        const formattedHours = String(hours).padStart(2, '0');
-        const formattedMinutes = String(minutes).padStart(2, '0');
-        const formattedSeconds = String(seconds).padStart(2, '0');
-        
-        // Update the countdown elements if they exist
-        const countdownSegments = document.querySelectorAll('.digital-counter .counter-segment');
-        if (countdownSegments.length >= 6) {
-            countdownSegments[0].textContent = 'D';
-            countdownSegments[1].textContent = '-';
-            countdownSegments[2].textContent = formattedDays;
-            countdownSegments[3].textContent = formattedHours;
-            countdownSegments[4].textContent = ':';
-            countdownSegments[5].textContent = formattedMinutes;
-            countdownSegments[6].textContent = ':';
-            countdownSegments[7].textContent = formattedSeconds;
+    setTimeout(() => {
+        const consoleInput = document.getElementById('console-input');
+        const consoleOutput = document.querySelector('.interactive-console');
+
+        if (consoleInput && consoleOutput) {
+            const terminal = new ConsoleTerminal(consoleInput, consoleOutput);
+
+            Object.defineProperty(window.snackspacecon, 'terminal', {
+                get: function() {
+                    if (_debugDetection.isPresent()) {
+                        const limitedTerminal = Object.create(terminal);
+                        limitedTerminal.cmdMasterKey = function() {
+                            this.appendOutput('Nice try! Debug mode detected.');
+                        };
+                        limitedTerminal.cmdDecrypt = function() {
+                            this.appendOutput('Debug mode active - command disabled.');
+                        };
+                        return limitedTerminal;
+                    }
+                    return terminal;
+                },
+                enumerable: false,
+                configurable: false
+            });
+
+            terminal.appendOutput('5N4CK5P4C3C0N TERMINAL v1.0');
+            terminal.appendOutput('Type "help" for available commands.');
+            terminal.appendOutput('>_');
         }
-    };
-    
-    // Update the countdown every second
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-    
-    // Initialize audio player
-    setupAudioPlayer();
-    
-    // Check for challenge completion from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const challenge = urlParams.get('challenge');
-    const status = urlParams.get('status');
-    
-    if (challenge && status === 'completed') {
-        storage.completeChallenge(challenge);
-    }
+    }, 100 + Math.random() * 500);
 });
 
-// Functions for Challenge 1: Snack Cryptography
-function decodeSecretMenu() {
-    const menuItems = document.querySelectorAll('#secret-menu-items li');
-    if (!menuItems.length) return null;
-    
-    // Gather the IDs which spell out the key
-    const key = Array.from(menuItems)
-        .filter(item => item.id)
-        .map(item => item.id)
-        .join('');
-    
-    // Alternative method: first letters of each item
-    const firstLetters = Array.from(menuItems)
-        .filter(item => !item.classList.contains('divider'))
-        .map(item => item.textContent.trim()[0])
-        .join('');
-    
-    return {
-        idKey: key,
-        letterKey: firstLetters,
-        formUrl: `/submit.html?key=${CHALLENGES.snackCrypto.key}`
+window.snackspacecon = (function() {
+    let _internalState = {
+        initialized: false,
+        accessCount: 0,
+        lastAccess: Date.now()
     };
-}
 
-// Functions for Challenge 2: Shadow CTF
-function extractShadowData() {
-    const shadowPath = document.getElementById('shadow-path');
-    if (!shadowPath) return null;
-    
-    const encodedData = shadowPath.getAttribute('data-secret');
-    if (!encodedData) return null;
-    
-    try {
-        // Double-encoded Base64
-        const firstDecode = decodeBase64(encodedData);
-        const secondDecode = decodeBase64(firstDecode);
-        
-        return {
-            rawData: encodedData,
-            decoded: secondDecode
-        };
-    } catch (e) {
-        console.error('Error decoding shadow data:', e);
-        return null;
-    }
-}
+    const secureProxy = {
+        snackCrypto: {
+            get key() {
+                _internalState.accessCount++;
+                _internalState.lastAccess = Date.now();
 
-// Export functions if needed in other files
-window.snackspacecon = {
-    storage: storage,
-    challenges: CHALLENGES,
-    dnsChallenge: dnsChallenge,
-    decodeSecretMenu: decodeSecretMenu,
-    extractShadowData: extractShadowData
-};
+                if (_internalState.accessCount > 10) {
+                    const delay = Math.min(_internalState.accessCount * 10, 1000);
+                    const startTime = Date.now();
+                    while (Date.now() - startTime < delay) {
+                        // Busy wait to prevent easy bypassing
+                    }
+                }
+
+                return CHALLENGES.snackCrypto.key();
+            },
+            submissionUrl: '/submit.html'
+        },
+        shadowCTF: {
+            get key() {
+                return CHALLENGES.shadowCTF.key();
+            },
+            hiddenData: CHALLENGES.shadowCTF.hiddenData
+        },
+        dnsChallenge: {
+            get key() {
+                return CHALLENGES.dnsChallenge.key();
+            },
+            startingDomain: CHALLENGES.dnsChallenge.startingDomain
+        },
+        masterKey: {
+            get key() {
+                return CHALLENGES.masterKey.key();
+            },
+            get location() {
+                return CHALLENGES.masterKey.location();
+            }
+        }
+    };
+
+    return {
+        storage: storage,
+        challenges: secureProxy,
+        dnsChallenge: dnsChallenge,
+        decodeSecretMenu: decodeSecretMenu,
+        extractShadowData: extractShadowData,
+        version: "1.0.0-secure",
+        utils: {
+            formatDate: _decoyFunction3,
+                reverseString: _decoyFunction2,
+                checkStatus: () => "OPERATIONAL"
+        }
+    };
+})();
+
+(function() {
+    const functionNames = [
+        '_s1', '_s2', '_s3', '_s4',
+        'decodeBase64', 'asciiToString',
+        '_decoyFunction1', '_decoyFunction2', '_decoyFunction3'
+    ];
+
+    functionNames.forEach(name => {
+        if (typeof window[name] === 'function') {
+            const newName = '_' + Math.random().toString(36).substring(2, 8);
+            window[newName] = window[name];
+            delete window[name];
+        }
+    });
+
+    setInterval(() => {
+        if (document.hidden && Math.random() < 0.1) {
+            console.log("%cCONGRATULATIONS! You found a secret!", "color: #00FFFF; font-size: 16px;");
+            console.log("%cThe key is: NOT-THE-REAL-KEY-KEEP-LOOKING", "color: #FF00FF;");
+        }
+    }, 30000);
+})();
