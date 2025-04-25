@@ -56,5 +56,5 @@ This is a creative project for SnackSpaceCon (BETA). If you'd like to contribute
 
 ---
 
-*SnackSpaceCon operates independently from HackSpaceCon.*  
+*SnackSpaceCon operates independently from [HackSpaceCon](https://hackspacecon.com}.*  
 *© 2025 SnackSpaceCon Crew*
