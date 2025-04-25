@@ -472,7 +472,7 @@ const konamiHandler = new KonamiCode(() => {
     }
 });
 
-// Audio player functionality
+// Updated Audio Player with Local Files
 function setupAudioPlayer() {
     const toggleButton = document.getElementById('toggle-audio');
     const nextTrackButton = document.getElementById('next-track');
@@ -483,55 +483,85 @@ function setupAudioPlayer() {
     
     if (!toggleButton || !audioElement) return;
     
-    // Audio tracks
+    // Updated tracks with locally hosted audio files
     const tracks = [
         {
             name: '5N4CK_TUN3',
-            url: 'https://soundimage.org/wp-content/uploads/2017/07/Arcade-Puzzler.mp3'
+            url: 'assets/Arcade-Puzzler.mp3'
         },
         {
-            name: 'CYPH3R_B34T',
-            url: 'https://soundimage.org/wp-content/uploads/2020/02/EKM-Like-That-Also.mp3'
+            name: 'P1X3L_T0WN',
+            url: 'assets/Lifes-Good-in-Pixeltown.mp3'
         },
         {
-            name: 'H4CK_W4V3',
-            url: 'https://soundimage.org/wp-content/uploads/2016/01/Puzzle-Game-3.mp3'
+            name: 'SP4C3LY_B34T',
+            url: 'assets/Spiff-Spacely.mp3'
         }
     ];
     
     let currentTrackIndex = 0;
     
+    // Set initial source
+    audioElement.src = tracks[currentTrackIndex].url;
+    
+    // Set preload attribute for better performance
+    audioElement.preload = 'auto';
+    
     // Toggle play/pause
-    toggleButton.addEventListener('click', () => {
+    toggleButton.addEventListener('click', function() {
         if (audioElement.paused) {
-            audioElement.play();
-            toggleButton.textContent = 'PAUSE ' + tracks[currentTrackIndex].name;
+            // Explicitly load before playing
+            audioElement.load();
+            const playPromise = audioElement.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Playback started successfully
+                    this.textContent = 'PAUSE ' + tracks[currentTrackIndex].name;
+                }).catch(error => {
+                    // Playback failed
+                    console.error('Error playing audio:', error);
+                    this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+                });
+            }
         } else {
             audioElement.pause();
-            toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+            this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
         }
     });
     
     // Next track
     if (nextTrackButton) {
-        nextTrackButton.addEventListener('click', () => {
+        nextTrackButton.addEventListener('click', function() {
             currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
             audioElement.src = tracks[currentTrackIndex].url;
+            audioElement.load(); // Ensure we load the new source
+            
             toggleButton.textContent = audioElement.paused ? 
                 'PLAY ' + tracks[currentTrackIndex].name : 
                 'PAUSE ' + tracks[currentTrackIndex].name;
             
             if (!audioElement.paused) {
-                audioElement.play();
+                const playPromise = audioElement.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error('Error playing audio after track change:', error);
+                        toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+                    });
+                }
             }
         });
     }
     
     // Volume control
     if (volumeSlider) {
-        volumeSlider.addEventListener('input', () => {
-            audioElement.volume = volumeSlider.value;
+        volumeSlider.addEventListener('input', function() {
+            audioElement.volume = this.value;
         });
+        
+        // Set initial volume
+        audioElement.volume = volumeSlider.value;
     }
     
     // Mini player toggle
@@ -550,15 +580,40 @@ function setupAudioPlayer() {
             windowControls.appendChild(minimizeButton);
         }
         
-        minimizeButton.addEventListener('click', () => {
+        minimizeButton.addEventListener('click', function() {
             audioPlayer.style.display = 'none';
             miniPlayer.style.display = 'flex';
         });
         
-        miniPlayer.addEventListener('click', () => {
+        miniPlayer.addEventListener('click', function() {
             miniPlayer.style.display = 'none';
             audioPlayer.style.display = 'flex';
         });
+    }
+    
+    // Error handling
+    audioElement.addEventListener('error', function(e) {
+        console.error('Audio error:', e);
+        if (audioElement.error) {
+            console.error('Audio error code:', audioElement.error.code);
+            console.error('Audio error message:', audioElement.error.message || 'No details available');
+        }
+        
+        // Try to recover after a short delay
+        setTimeout(() => {
+            audioElement.load();
+            // Update the button text since playback failed
+            if (toggleButton) {
+                toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+            }
+        }, 1000);
+    });
+    
+    // Initial load
+    try {
+        audioElement.load();
+    } catch (e) {
+        console.error('Initial audio load failed:', e);
     }
 }
 
