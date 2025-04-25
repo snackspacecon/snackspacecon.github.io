@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(updateCountdown, 1000);
     
     // ==========================================
-    // FIXED AUDIO PLAYER FUNCTIONALITY
+    // UPDATED AUDIO PLAYER FOR LOCAL FILES
     // ==========================================
     function setupAudioPlayer() {
         const toggleButton = document.getElementById('toggle-audio');
@@ -247,35 +247,40 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!toggleButton || !audioElement) return;
         
-        // Audio tracks
+        // Updated audio tracks with locally hosted files
         const tracks = [
             {
                 name: '5N4CK_TUN3',
-                url: 'https://soundimage.org/wp-content/uploads/2017/07/Arcade-Puzzler.mp3'
+                url: 'assets/Arcade-Puzzler.mp3'
             },
             {
-                name: 'CYPH3R_B34T',
-                url: 'https://soundimage.org/wp-content/uploads/2020/02/EKM-Like-That-Also.mp3'
+                name: 'P1X3L_T0WN',
+                url: 'assets/Lifes-Good-in-Pixeltown.mp3'
             },
             {
-                name: 'H4CK_W4V3',
-                url: 'https://soundimage.org/wp-content/uploads/2016/01/Puzzle-Game-3.mp3'
+                name: 'SP4C3LY_B34T',
+                url: 'assets/Spiff-Spacely.mp3'
             }
         ];
         
         let currentTrackIndex = 0;
         
-        // Set preload attribute to ensure audio is ready
+        // Ensure the audio element has the correct initial source
+        audioElement.src = tracks[currentTrackIndex].url;
+        
+        // Set preload attribute for better performance
         audioElement.preload = 'auto';
         
-        // Toggle play/pause
+        // Toggle play/pause with proper error handling
         toggleButton.addEventListener('click', function() {
             if (audioElement.paused) {
-                // Explicitly load and play with error handling
+                // Make sure we have the right track loaded
+                audioElement.src = tracks[currentTrackIndex].url;
                 audioElement.load();
+                
+                // Try to play with error handling
                 const playPromise = audioElement.play();
                 
-                // Handle play promise (required for modern browsers)
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         // Playback started successfully
@@ -284,22 +289,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Playback failed
                         console.error('Error playing audio:', error);
                         this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
-                        // Show error to user (optional)
-                        // alert('Audio playback failed. Please try again.');
+                        
+                        // Log detailed error information
+                        if (error.name) console.error('Error name:', error.name);
+                        if (error.message) console.error('Error message:', error.message);
+                        
+                        // You could show a user-friendly message here if needed
+                        // alert('Audio playback is not available. Please check your browser settings.');
                     });
                 }
             } else {
+                // Just pause if already playing
                 audioElement.pause();
                 this.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
             }
         });
         
-        // Next track
+        // Next track with improved error handling
         if (nextTrackButton) {
             nextTrackButton.addEventListener('click', function() {
+                // Move to the next track
                 currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
                 
-                // Update source and load before attempting to play
+                // Update the source and load
                 audioElement.src = tracks[currentTrackIndex].url;
                 audioElement.load();
                 
@@ -308,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'PLAY ' + tracks[currentTrackIndex].name : 
                     'PAUSE ' + tracks[currentTrackIndex].name;
                 
-                // If was playing, continue playing the new track
+                // If we were already playing, continue with the new track
                 if (!audioElement.paused) {
                     const playPromise = audioElement.play();
                     
@@ -364,16 +376,25 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Audio error:', e);
             if (audioElement.error) {
                 console.error('Audio error code:', audioElement.error.code);
-                console.error('Audio error message:', audioElement.error.message);
+                console.error('Audio error message:', audioElement.error.message || 'No error message available');
             }
             
-            // Try to recover after a short delay
+            // Try to recover by reloading after a delay
             setTimeout(() => {
                 audioElement.load();
-                // Optionally try to play again if it was supposed to be playing
-                // if (!audioElement.paused) audioElement.play().catch(e => console.error('Recovery failed:', e));
+                // Update UI to show playback failed
+                if (toggleButton) {
+                    toggleButton.textContent = 'PLAY ' + tracks[currentTrackIndex].name;
+                }
             }, 1000);
         });
+        
+        // Load the audio initially
+        try {
+            audioElement.load();
+        } catch (e) {
+            console.error('Initial audio load failed:', e);
+        }
     }
     
     // Initialize audio player
