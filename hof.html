@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5N4CK5P4C3C0N - H4LL 0F F4M3</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* Additional styles specific to Hall of Fame */
+        .hof-entry {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-left: 3px solid var(--color-accent);
+            transition: all 0.3s ease;
+        }
+        
+        .hof-entry:hover {
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+        }
+        
+        .hof-handle {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--color-accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hof-timestamp {
+            font-size: 0.7em;
+            color: var(--color-secondary);
+            opacity: 0.7;
+        }
+        
+        .hof-snack {
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 1px dashed var(--color-primary);
+            font-style: italic;
+        }
+        
+        .hof-description {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .challenge-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: rgba(255, 102, 0, 0.2);
+            border: 1px solid var(--color-accent);
+            font-size: 0.7em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .empty-entry {
+            border-left: 3px dashed var(--color-secondary);
+            opacity: 0.6;
+        }
+        
+        .empty-entry:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .waiting-text {
+            color: var(--color-secondary);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo-glitch" data-text="HALL OF FAME">H4LL 0F F4M3</div>
+                <div class="logo-glitch" data-text="HALL OF FAME">H4LL 0F F4M3</div>
+                <div class="logo-glitch" data-text="HALL OF FAME">H4LL 0F F4M3</div>
+            </div>
+            
+            <div class="badges-container">
+                <div class="badge">5N4CK5P4C3C0N</div>
+                <div class="badge">CH4LL3NG3_01</div>
+                <div class="badge">CR3D1T5</div>
+                <div class="badge">
+                    <a href="/" style="color: inherit; text-decoration: none;">M41N_T3RM1N4L</a>
+                </div>
+            </div>
+        </header>
+        
+        <div class="slash-container">
+            <div class="slash"></div>
+        </div>
+        
+        <div class="retro-window">
+            <div class="window-header">
+                <div class="window-title">RECOGNITION_DATABASE</div>
+                <div class="window-controls">
+                    <div class="window-button" style="background-color: #FF6600;"></div>
+                    <div class="window-button" style="background-color: #FFFF00;"></div>
+                    <div class="window-button" style="background-color: #33FF33;"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <p class="typewriter-text">ACCESSING ACHIEVEMENT DATABASE...</p>
+                <p>DISPLAYING RECORDS FOR: CHALLENGE 01 - SNACK CRYPTOGRAPHY</p>
+                <p>CHALLENGE STATUS: <span style="color: var(--color-accent);">ACTIVE</span> | DATABASE: <span style="color: var(--color-secondary);">ONLINE</span></p>
+                
+                <div class="command-line">
+                    <span class="command-text">cat /var/log/snack_submissions.log | sort -r</span>
+                    <span class="cursor"></span>
+                </div>
+                
+                <div class="hof-entry">
+                    <div class="hof-handle">
+                        <span>@noopnoop <span class="challenge-badge">CHALLENGE 01</span></span>
+                        <span class="hof-timestamp">2025-05-07T15:52:36.000Z</span>
+                    </div>
+                    <div class="hof-snack">"Binary Bites"</div>
+                    <div class="hof-description">
+                        [Description=Quinoa puff based shapes of 1's and 0's. Grab a handfull of Binary bites and eat them out of the bag, pour them on some yogurt or enjoy them in a bowl of milk. There are infinite ways to enjoy Binary Bites. HackerConnection= At its core, binary is the language of computers. Every program, exploit, and script a hacker uses ultimately boils down to 1s and 0s. The name taps into the foundation of all digital systems.
+ The word binary evokes the days of command-line hacking, shell scripts, and booting raw binaries, especially in CTFs, red team engagements, or exploit dev. The name is a nod to that gritty, hands-on ethos. Ingedients= Quinoa Puffs
+Almond Butter
+Dark Chocolate Chips
+Espresso Powder
+Sea salt
+]
+                    </div>
+                </div>
+                
+                <div class="hof-entry">
+                    <div class="hof-handle">
+                        <span>FleaBeard <span class="challenge-badge">CHALLENGE 01</span></span>
+                        <span class="hof-timestamp">2025-05-11T13:47:36.000Z</span>
+                    </div>
+                    <div class="hof-snack">"kerberoasted nuts"</div>
+                    <div class="hof-description">                       
+                        [Description=They're nuts.... that have been roasted... kerberoasted
+HackerConnection=High protein snack for those extended pentesting engagements.
+Ingredients=Nuts
+Seasonings
+Heat]
+                    </div>  
+                </div>
+
+                
+                <div class="hof-entry empty-entry">
+                    <div class="hof-handle">
+                        <span>[SLOT AVAILABLE]</span>
+                        <span class="hof-timestamp">--/--/---- --:--:--</span>
+                    </div>
+                    <div class="waiting-text">
+                        This slot awaits your submission. Complete Challenge 01 to claim your place in the Hall of Fame.
+                    </div>
+                </div>
+                
+                <div class="distorted-box" style="margin-top: 30px;">
+                    <h3 class="glitchy-text" data-text="HOW TO CLAIM YOUR SPOT">HOW TO CLAIM YOUR SPOT</h3>
+                    <ol style="margin-top: 15px; padding-left: 20px;">
+                        <li>Find the secret menu by investigating the site's structure</li>
+                        <li>Decode the hidden key to access the submission form</li>
+                        <li>Create your original hacker-inspired snack concept</li>
+                        <li>Submit your entry to be permanently recorded in the database</li>
+                        <li>Wait for validation from the SnackSpaceCon organizers</li>
+                    </ol>
+                    <p style="margin-top: 15px;">
+                        Accepted submissions will be displayed in this Hall of Fame as proof of your cryptographic prowess and culinary creativity.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="holo-card" style="margin-top: 30px;">
+            <h3 style="color: var(--color-secondary);">CHALLENGE 01 LEADERBOARD</h3>
+            <p style="margin-bottom: 20px;">Watch this space for the first confirmed completions of the Snack Cryptography challenge.</p>
+            
+            <div class="command-line">
+                <span class="command-text">grep "STATUS: COMPLETED" /var/log/challenge01.log | wc -l</span>
+                <span class="cursor"></span>
+            </div>
+            <p style="color: var(--color-accent); text-align: center; margin-top: 10px; font-size: 1.5em;">0</p>
+            
+            <p style="margin-top: 20px; text-align: center;" class="blink">WAITING FOR FIRST SUBMISSIONS</p>
+        </div>
+        
+        <footer>
+            <p>SnackSpaceCon Hall of Fame | Challenge 01: Snack Cryptography</p>
+            <p>Complete the challenge to be immortalized in the records</p>
+            <p><a href="/">Return to Main Terminal</a></p>
+            <p class="glitchy-text" data-text="TRANSMISSION_INCOMPLETE">TRANSMISSION_INCOMPLETE</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Terminal line animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some glitch effects to entries on hover
+            document.querySelectorAll('.hof-entry').forEach(entry => {
+                if (!entry.classList.contains('empty-entry')) {
+                    entry.addEventListener('mouseenter', function() {
+                        // Add a small chance of a glitch effect
+                        if (Math.random() < 0.3) {
+                            this.style.transform = `translateX(${Math.random() * 5}px)`;
+                            setTimeout(() => {
+                                this.style.transform = '';
+                            }, 150);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
