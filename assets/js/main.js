@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "Establishing peer connection...",
         "Scanning for unauthorized monitoring...",
         "Connection secured via obfuscated channel",
-        "Waiting for other nodes...",
+        "Waiting for other nodes... Errant Packet detected...",
         "Bring your own tools",
         "Expect the unexpected",
         "Trust verification required",
